@@ -94,19 +94,19 @@ img, svg { display: block; max-width: 100%; }
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.8) 10%,
-    rgba(0, 0, 0, 0) 30%,
-    rgba(0, 0, 0, 0) 70%,
-    rgba(0, 0, 0, 0.8) 90%,
+    rgba(0, 0, 0, 0.8) clamp(40px, 6vh, 80px),
+    rgba(0, 0, 0, 0) clamp(100px, 16vh, 200px),
+    rgba(0, 0, 0, 0) calc(100% - clamp(100px, 16vh, 200px)),
+    rgba(0, 0, 0, 0.8) calc(100% - clamp(40px, 6vh, 80px)),
     rgba(0, 0, 0, 1) 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.8) 10%,
-    rgba(0, 0, 0, 0) 30%,
-    rgba(0, 0, 0, 0) 70%,
-    rgba(0, 0, 0, 0.8) 90%,
+    rgba(0, 0, 0, 0.8) clamp(40px, 6vh, 80px),
+    rgba(0, 0, 0, 0) clamp(100px, 16vh, 200px),
+    rgba(0, 0, 0, 0) calc(100% - clamp(100px, 16vh, 200px)),
+    rgba(0, 0, 0, 0.8) calc(100% - clamp(40px, 6vh, 80px)),
     rgba(0, 0, 0, 1) 100%
   );
 }
