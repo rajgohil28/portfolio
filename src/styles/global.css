@@ -1505,7 +1505,7 @@ img.shot { height: 100%; object-fit: cover; }
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: shine-reverse 0.6s linear infinite;
+  animation: shine 0.6s linear infinite;
 }
 .drag-hint-arrows .arrow-right {
   background: linear-gradient(90deg, rgba(0,0,0,0.2) 0%, var(--ink) 50%, rgba(0,0,0,0.2) 100%);
@@ -1513,7 +1513,7 @@ img.shot { height: 100%; object-fit: cover; }
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: shine 0.6s linear infinite;
+  animation: shine-reverse 0.6s linear infinite;
 }
 @keyframes shine {
   to { background-position: 200% center; }
