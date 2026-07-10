@@ -101,8 +101,8 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
   const portrait = kind === "mobile";
   const slots = portrait ? PORTRAIT : LANDSCAPE;
   const reduced = useReducedMotion();
-  // The light "gradient white" treatment — piloted on Enterprise AI (web).
-  const light = kind === "web";
+  // The light "gradient white" treatment alternates: Enterprise AI (web) and Spatial (xr)
+  const light = kind === "web" || kind === "xr";
 
   const [page, setPage] = useState(0);
   const [phase, setPhase] = useState<"idle" | "exit" | "enter">("idle");
