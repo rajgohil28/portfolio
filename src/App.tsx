@@ -1,0 +1,143 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { bySlug } from "./content/portfolio";
+import { DotRail, type SectionRef } from "./components/DotRail";
+import { Intro } from "./components/sections/Intro";
+import { ProjectSection } from "./components/sections/ProjectSection";
+import { Closing } from "./components/sections/Closing";
+import { CaseStudy } from "./components/CaseStudy";
+import { Cursor } from "./components/Cursor";
+import { useReducedMotion } from "./hooks/useReducedMotion";
+
+const SECTIONS: SectionRef[] = [
+  { id: "intro", label: "Intro" },
+  { id: "web-apps", label: "Web Apps" },
+  { id: "mobile-apps", label: "Mobile Apps" },
+  { id: "xr", label: "XR" },
+  { id: "games", label: "Games" },
+  { id: "contact", label: "Contact" },
+];
+
+function slugFromHash(): string | null {
+  const m = window.location.hash.match(/^#\/p\/([\w-]+)$/);
+  return m ? m[1] : null;
+}
+
+export default function App() {
+  const [slug, setSlug] = useState<string | null>(slugFromHash);
+  const [active, setActive] = useState(0);
+  const snapRef = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const project = slug ? bySlug(slug) : undefined;
+
+  /* Hash routing — back/forward and direct links work. */
+  useEffect(() => {
+    const onHash = () => setSlug(slugFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const closeCase = useCallback(() => {
+    // Clear the route without adding a history entry, then sync state.
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    setSlug(null);
+  }, []);
+
+  /* Lock and hide the page behind the case study. */
+  useEffect(() => {
+    const snap = snapRef.current;
+    if (!snap) return;
+    if (project) {
+      snap.classList.add("is-locked");
+      snap.setAttribute("inert", "");
+    } else {
+      snap.classList.remove("is-locked");
+      snap.removeAttribute("inert");
+    }
+  }, [project]);
+
+  /* Track the active section for the dot rail + entrance choreography. */
+  useEffect(() => {
+    const snap = snapRef.current;
+    if (!snap) return;
+    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(Boolean) as HTMLElement[];
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          // A section is "active" when it fills half the viewport —
+          // ratio alone fails for sections taller than the screen.
+          const covers = e.intersectionRect.height >= snap.clientHeight * 0.5;
+          if (e.isIntersecting && (e.intersectionRatio >= 0.5 || covers)) {
+            setActive(els.indexOf(e.target as HTMLElement));
+          }
+        }
+      },
+      { root: snap, threshold: [0.1, 0.25, 0.5, 0.75] },
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  /* Subtle parallax during the snap glide (skipped under reduced motion). */
+  useEffect(() => {
+    const snap = snapRef.current;
+    if (!snap || reduced) return;
+    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(Boolean) as HTMLElement[];
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const vh = snap.clientHeight;
+        for (const el of els) {
+          const p = Math.max(-1, Math.min(1, (snap.scrollTop - el.offsetTop) / vh));
+          el.style.setProperty("--p", p.toFixed(3));
+        }
+      });
+    };
+    onScroll();
+    snap.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      snap.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [reduced]);
+
+  const go = useCallback((id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  /* Keyboard: arrows / PageUp / PageDown step between sections. */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (project) return;
+      const t = e.target as HTMLElement;
+      if (t.closest?.("input, textarea, select")) return;
+      let dir = 0;
+      if (e.key === "ArrowDown" || e.key === "PageDown") dir = 1;
+      if (e.key === "ArrowUp" || e.key === "PageUp") dir = -1;
+      if (!dir) return;
+      e.preventDefault();
+      const next = Math.max(0, Math.min(SECTIONS.length - 1, active + dir));
+      go(SECTIONS[next].id);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active, project, go]);
+
+  return (
+    <>
+      <a className="visually-hidden" href="#web-apps">Skip to work</a>
+      <main ref={snapRef} className="snap">
+        <Intro active={active === 0} />
+        <ProjectSection kind="web" active={active === 1} />
+        <ProjectSection kind="mobile" active={active === 2} />
+        <ProjectSection kind="xr" active={active === 3} />
+        <ProjectSection kind="game" active={active === 4} />
+        <Closing active={active === 5} />
+      </main>
+      <div className="glass-edges" aria-hidden="true" />
+      {!project && <DotRail sections={SECTIONS} active={active} onGo={go} />}
+      {project && <CaseStudy project={project} onClose={closeCase} />}
+      <Cursor />
+    </>
+  );
+}

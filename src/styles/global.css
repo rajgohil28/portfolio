@@ -83,6 +83,30 @@ img, svg { display: block; max-width: 100%; }
 
 /* ── snap container ─────────────────────────────────────────────── */
 
+.glass-edges {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40; /* below modal/cursor/drag-hint, above sections */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  /* The mask makes the blur only apply to the top and bottom edges, fading into the center */
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 12%,
+    rgba(0, 0, 0, 0) 88%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 12%,
+    rgba(0, 0, 0, 0) 88%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+
 .snap {
   height: 100svh;
   overflow-y: auto;
