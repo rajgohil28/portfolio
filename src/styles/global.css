@@ -710,6 +710,12 @@ img, svg { display: block; max-width: 100%; }
   /* difference-blend inverts black text to white on a white ground */
   mix-blend-mode: normal;
 }
+.sec-light .collage-heading {
+  background: linear-gradient(135deg, #000000 0%, #434352 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .sec-light .reel-cap {
   background: linear-gradient(to top, rgba(255, 255, 255, 0.96) 30%, rgba(255, 255, 255, 0));
 }
