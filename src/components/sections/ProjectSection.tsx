@@ -98,8 +98,8 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
   const all = byKind(kind);
   const pages = chunk(all, PAGE_SIZE);
   const pageCount = pages.length;
-  const portrait = kind === "mobile";
-  const slots = portrait ? PORTRAIT : LANDSCAPE;
+  const portrait = false;
+  const slots = LANDSCAPE;
   const reduced = useReducedMotion();
   // The light "gradient white" treatment alternates: Enterprise AI (web) and Spatial (xr)
   const light = kind === "web" || kind === "xr";
