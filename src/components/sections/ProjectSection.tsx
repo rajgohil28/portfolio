@@ -186,17 +186,17 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
       aria-label={meta.label}
     >
       <div className="collage-title-block par">
-        <p className="collage-kicker ent" style={{ ["--d" as string]: "0.05s" }}>
+        <p className="collage-kicker ent" style={{ ["--d" as string]: "0s" }}>
           {meta.label}
         </p>
         <h2 className="collage-heading">
           {meta.heading.split(" ").map((w, i) => (
             <span key={i} className="w-mask">
-              <span className="word" style={{ ["--wd" as string]: `${0.1 + i * 0.06}s` }}>{w}</span>
+              <span className="word" style={{ ["--wd" as string]: `${0.05 + i * 0.03}s` }}>{w}</span>
             </span>
           ))}
         </h2>
-        <p className="collage-sub ent" style={{ ["--d" as string]: "0.3s" }}>{meta.sub}</p>
+        <p className="collage-sub ent" style={{ ["--d" as string]: "0.15s" }}>{meta.sub}</p>
       </div>
 
       <div
@@ -213,20 +213,21 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
         {cards.map((p, i) => (
           <ReelCard key={p.slug} project={p} slot={slots[i]} i={i} num={page * PAGE_SIZE + i + 1} />
         ))}
-        {pageCount > 1 && (
-          <div className={`drag-hint ${isPressing ? 'is-pressing' : ''}`}>
-            {isPressing ? (
-              <span className="drag-hint-arrows">
-                <span className="arrow-left">{'<<<<'}</span>
-                <span className="arrow-dot">{'•'}</span>
-                <span className="arrow-right">{'>>>>'}</span>
-              </span>
-            ) : (
-              <span className="drag-hint-text">Hold and drag</span>
-            )}
-          </div>
-        )}
       </div>
+
+      {pageCount > 1 && (
+        <div className={`drag-hint ${isPressing ? 'is-pressing' : ''}`}>
+          {isPressing ? (
+            <span className="drag-hint-arrows">
+              <span className="arrow-left">{'<<<<'}</span>
+              <span className="arrow-dot">{'•'}</span>
+              <span className="arrow-right">{'>>>>'}</span>
+            </span>
+          ) : (
+            <span className="drag-hint-text">Hold and drag</span>
+          )}
+        </div>
+      )}
     </section>
   );
 }
