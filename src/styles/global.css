@@ -710,7 +710,7 @@ img, svg { display: block; max-width: 100%; }
   /* difference-blend inverts black text to white on a white ground */
   mix-blend-mode: normal;
 }
-.sec-light .collage-heading {
+.sec-light .collage-heading .word {
   background: linear-gradient(135deg, #000000 0%, #434352 100%);
   -webkit-background-clip: text;
   background-clip: text;
