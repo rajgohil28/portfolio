@@ -5,17 +5,17 @@ import { Intro } from "./components/sections/Intro";
 import { ProjectSection } from "./components/sections/ProjectSection";
 import { Closing } from "./components/sections/Closing";
 import { CaseStudy } from "./components/CaseStudy";
-import { Cursor } from "./components/Cursor";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { AdminApp } from "./admin/AdminApp";
+import { Preloader } from "./components/Preloader";
 
 const SECTIONS: (SectionRef & { theme: "light" | "dark" })[] = [
-  { id: "intro", label: "Intro", theme: "dark" },
+  { id: "intro", label: "Intro", theme: "light" },
   { id: "web-apps", label: "Web Apps", theme: sections.web.theme },
   { id: "mobile-apps", label: "Mobile Apps", theme: sections.mobile.theme },
   { id: "xr", label: "XR", theme: sections.xr.theme },
   { id: "games", label: "Games", theme: sections.games.theme },
-  { id: "contact", label: "Contact", theme: "dark" },
+  { id: "contact", label: "Contact", theme: "light" },
 ];
 
 function slugFromHash(): string | null {
@@ -30,6 +30,17 @@ export default function App() {
   const snapRef = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const project = slug ? bySlug(slug) : undefined;
+  const [isPreview, setIsPreview] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isLiveMode = urlParams.has("live");
+      const hasDraft = !!localStorage.getItem("cms_draft_content");
+      setIsPreview(hasDraft && !isLiveMode);
+    }
+  }, []);
 
   /* Hash routing — back/forward and direct links work. */
   useEffect(() => {
@@ -130,11 +141,21 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [active, project, go]);
 
+  /* Disable scroll/behavior on body during preloading */
+  useEffect(() => {
+    if (!isLoaded) {
+      document.body.classList.add("is-preloading");
+    } else {
+      document.body.classList.remove("is-preloading");
+    }
+  }, [isLoaded]);
+
   return (
     <>
+      <Preloader onDone={() => setIsLoaded(true)} />
       <a className="visually-hidden" href="#web-apps">Skip to work</a>
-      <main ref={snapRef} className="snap">
-        <Intro active={active === 0} />
+      <main ref={snapRef} className={`snap${!isLoaded ? " is-preloading" : ""}`}>
+        <Intro active={isLoaded && active === 0} />
         <ProjectSection kind="web" active={active === 1} />
         <ProjectSection kind="mobile" active={active === 2} />
         <ProjectSection kind="xr" active={active === 3} />
@@ -142,7 +163,7 @@ export default function App() {
         <Closing active={active === 5} />
       </main>
       <div className="glass-edges" aria-hidden="true" />
-      {!project && (
+      {isLoaded && !project && (
         <DotRail
           sections={SECTIONS}
           active={active}
@@ -151,7 +172,29 @@ export default function App() {
         />
       )}
       {project && <CaseStudy project={project} onClose={closeCase} />}
-      <Cursor />
+      {isPreview && (
+        <div className="preview-banner">
+          <span className="preview-label">
+            <span className="preview-indicator"></span>
+            Draft Preview
+          </span>
+          <div className="preview-buttons">
+            <a href="/admin" className="preview-btn primary">Back to CMS</a>
+            <button 
+              className="preview-btn secondary" 
+              onClick={() => {
+                if (window.confirm("Are you sure you want to discard your draft changes? This cannot be undone.")) {
+                  localStorage.removeItem("cms_draft_content");
+                  window.location.href = "/?live=true";
+                }
+              }}
+            >
+              Discard Draft
+            </button>
+            <a href="/?live=true" className="preview-btn tertiary">View Live</a>
+          </div>
+        </div>
+      )}
     </>
   );
 }

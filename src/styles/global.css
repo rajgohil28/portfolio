@@ -1707,3 +1707,500 @@ body.has-cursor button,
 body.has-cursor [role="button"] {
   cursor: none;
 }
+
+/* ── preview banner ─────────────────────────────────────────────── */
+
+.preview-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(15, 15, 17, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 16px;
+  border-radius: 40px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  font-family: var(--font);
+  font-size: 13px;
+  color: #fff;
+  animation: banner-slide-up 0.4s var(--spring);
+}
+
+@keyframes banner-slide-up {
+  from { transform: translate(-50%, 40px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.preview-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.preview-indicator {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+  animation: preview-pulse 2s infinite ease-in-out;
+}
+
+@keyframes preview-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.preview-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  padding-left: 16px;
+}
+
+.preview-btn {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: all 0.2s var(--ease);
+  display: inline-flex;
+  align-items: center;
+}
+
+.preview-btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.preview-btn.primary:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-1px);
+}
+
+.preview-btn.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f4f4f5;
+}
+
+.preview-btn.secondary:hover {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #fca5a5;
+  transform: translateY(-1px);
+}
+
+.preview-btn.tertiary {
+  color: var(--ink-2);
+}
+
+.preview-btn.tertiary:hover {
+  color: #fff;
+}
+
+/* ── preloader ─────────────────────────────────────────────────── */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 500; /* above everything, including cursor/modals */
+  background: #ffffff; /* pure white background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), visibility 0s 0.8s;
+  pointer-events: all;
+}
+
+.preloader.is-done {
+  opacity: 0;
+  transform: scale(1.02); /* elegant, very subtle expansion outwards on done */
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+/* Minimalist elegant circular progress */
+.preloader-hud {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  place-items: center;
+}
+
+.preloader-hud-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hud-ring-back {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.05); /* very faint stone grey track */
+  stroke-width: 1;
+}
+
+.hud-ring-progress {
+  fill: none;
+  stroke: #1c1917; /* charcoal progress line */
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  transition: stroke-dashoffset 0.1s ease;
+}
+
+.preloader-count {
+  font-family: var(--font);
+  font-size: 20px;
+  font-weight: 400;
+  color: #1c1917;
+  letter-spacing: -0.02em;
+}
+
+.preloader-tagline {
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 500;
+  color: #78716c; /* warm stone taupe */
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-top: 4px;
+}
+
+/* Elegant focus opening transitions for the main App */
+.snap {
+  transition: transform 1.2s var(--ease), filter 1.2s var(--ease);
+}
+
+.snap.is-preloading {
+  transform: scale(0.99); /* extremely subtle transition, highly elegant */
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* Avoid flashing or scrollbar issues during preloader */
+body.is-preloading {
+  overflow: hidden;
+}
+
+/* ── japanese backdrop ─────────────────────────────────────────── */
+
+.japanese-backdrop {
+  position: absolute;
+  inset: 0;
+  background: #fdfcf9; /* traditional warm washi parchment background */
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.parchment-texture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image: radial-gradient(rgba(28, 25, 23, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.japanese-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.intro-inner,
+.closing > div {
+  position: relative;
+  z-index: 2; /* ensure copy is perfectly readable and floats beautifully over the art */
+}
+
+.intro-ghost {
+  z-index: 1; /* float cards between background art and text */
+}
+
+/* ── elegant gallery framing ───────────────────────────────────── */
+
+.sec-light {
+  background: #fdfcf9; /* traditional warm washi parchment background */
+}
+
+/* 3D soft blurry pastel glow blob drifting behind text */
+.elegant-glow-blob {
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  max-width: 550px;
+  max-height: 550px;
+  background: radial-gradient(
+    circle,
+    rgba(254, 207, 239, 0.45) 0%,
+    rgba(255, 154, 158, 0.22) 35%,
+    rgba(252, 211, 77, 0.06) 65%,
+    transparent 100%
+  );
+  filter: blur(80px);
+  -webkit-filter: blur(80px);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+  animation: elegant-fluid-drift 16s ease-in-out infinite alternate;
+}
+
+@keyframes elegant-fluid-drift {
+  0% {
+    transform: translate(-50%, -55%) scale(0.95) rotate(0deg);
+  }
+  100% {
+    transform: translate(-45%, -45%) scale(1.05) rotate(45deg);
+  }
+}
+
+/* Elegant Text Style Overrides for Hero */
+.sec-light .intro-name {
+  font-size: clamp(36px, 6.5vw, 76px) !important; /* elegantly scaled down to be compact and fit more content */
+  font-weight: 600;
+  color: #1c1917; /* solid elegant charcoal-black only */
+}
+
+/* Top Header Bar styling absolute-positioned on Hero section */
+.elegant-header-bar {
+  position: absolute;
+  top: clamp(24px, 4.5vh, 40px);
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+  pointer-events: all;
+  width: calc(100% - (var(--gutter) * 2));
+}
+
+.brand-logo {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1c1917;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.elegant-nav-links {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.elegant-nav-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition: color 0.3s var(--ease), transform 0.3s var(--ease);
+  cursor: pointer;
+}
+
+.elegant-nav-link-icon:hover {
+  color: #1c1917;
+  transform: scale(1.15); /* elegant pop hover effect */
+}
+
+.elegant-header-bar .talk-button {
+  font-family: var(--font), sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 99px;
+  background: #1c1917 !important; /* solid, proud charcoal-black */
+  color: #ffffff !important; /* crisp white text */
+  border: 1px solid #1c1917 !important;
+  padding: 10px 22px !important;
+  transition: all 0.3s var(--ease) !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* space for the arrow */
+  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.08); /* clear, attractive clickable shadow */
+}
+
+.elegant-header-bar .talk-button .arrow {
+  display: inline-block;
+  transition: transform 0.3s var(--ease);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.elegant-header-bar .talk-button:hover {
+  transform: translateY(-2px) scale(1.02); /* elegant clickable scale shift */
+  background: #2d2a27 !important; /* slightly lighter charcoal on hover */
+  border-color: #2d2a27 !important;
+  box-shadow: 0 8px 20px rgba(28, 25, 23, 0.14); /* richer shadow on hover */
+  color: #ffffff !important;
+}
+
+.elegant-header-bar .talk-button:hover .arrow {
+  transform: translateX(4px); /* arrow slides right dynamically! */
+}
+
+/* Beautiful animated gradient on the rotating roles text */
+.sec-light .intro-rotator-word {
+  background: linear-gradient(135deg, #f59e0b 0%, #ec4899 35%, #8b5cf6 70%, #f59e0b 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rotator-in 0.7s var(--spring), animated-gradient-shift 6s linear infinite;
+  display: inline-block;
+}
+
+@keyframes animated-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Ensure original links look elegant and high-contrast in light mode */
+.sec-light .pill {
+  border: 1px solid rgba(28, 25, 23, 0.15);
+  color: #1c1917;
+  font-weight: 500;
+}
+
+.sec-light .pill:hover {
+  background: rgba(28, 25, 23, 0.04);
+  border-color: #1c1917;
+}
+
+.sec-light .pill.solid {
+  background: #1c1917;
+  color: #ffffff;
+  border-color: #1c1917;
+}
+
+.sec-light .pill.solid:hover {
+  background: #44403c;
+  border-color: #44403c;
+  color: #ffffff;
+}
+
+/* Selected Clients Logo Marquee Scroller Styles with EXTRA BREATHING SPACE */
+.client-logos-section {
+  margin: 84px auto 0; /* Centered, proud margins */
+  width: 60%; /* 40% smaller in visual width, beautifully compact and centered on desktop */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  pointer-events: all;
+  /* Natural integration: no borders, just raw elegant space! */
+  padding: 12px 0;
+}
+
+.client-logos-title {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #1c1917; /* rich full contrast charcoal instead of dim */
+  opacity: 0.9;
+}
+
+.client-marquee-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  /* Beautiful soft edge masking so logos fade out on screen borders */
+  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+
+.client-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: scroll-marquee 24s linear infinite;
+}
+
+.client-marquee-container:hover .client-marquee-track {
+  animation-play-state: paused; /* pause on hover for interactive feel */
+}
+
+.client-marquee-list {
+  display: flex;
+  align-items: center;
+  gap: 72px; /* generousSpacing */
+  padding-right: 72px;
+}
+
+.client-logo {
+  color: #1c1917; /* charcoal */
+  opacity: 0.65; /* PROMINENT BASE OPACITY for equal visual weight and focus */
+  transition: opacity 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.client-logo:hover {
+  opacity: 1;
+  transform: scale(1.04); /* premium microscopic scale on hover */
+}
+
+@keyframes scroll-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile responsive alignments */
+@media (max-width: 900px) {
+  .sec-light .intro-name {
+    font-size: clamp(32px, 9vw, 56px) !important;
+  }
+  .client-logos-section {
+    margin-top: 40px;
+    width: 100% !important; /* expand to full width on mobile devices */
+    padding: 18px 0;
+  }
+  .client-marquee-list {
+    gap: 48px;
+    padding-right: 48px;
+  }
+}
