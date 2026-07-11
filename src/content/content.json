@@ -1,0 +1,1409 @@
+{
+  "identity": {
+    "name": "Raj Gohil",
+    "role": "AI Developer & Product Designer",
+    "statement": "I design and ship AI products people rely on — enterprise platforms, consumer apps, spatial computing, and play.",
+    "email": "rajrjgohil@gmail.com",
+    "socials": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/rajgohil"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/rajgohil"
+      },
+      {
+        "label": "Resume",
+        "url": "/resume.pdf"
+      }
+    ],
+    "rotation": [
+      "Enterprise AI",
+      "Consumer apps",
+      "Spatial computing",
+      "Play"
+    ]
+  },
+  "closing": {
+    "heading": "Let's build the product\nyour users will keep.",
+    "sub": "Open to select engagements — AI products that deserve real design attention.",
+    "cta": "Start a conversation"
+  },
+  "sections": {
+    "web": {
+      "id": "web-apps",
+      "label": "Web Apps",
+      "heading": "Enterprise AI, shipped.",
+      "sub": "CRM, ERP, HR, and internal tools — AI woven into the workflows people already trust.",
+      "theme": "light"
+    },
+    "mobile": {
+      "id": "mobile-apps",
+      "label": "Mobile Apps",
+      "heading": "Consumer products with staying power.",
+      "sub": "D2C AI across health, finance, and lifestyle — designed for daily habits, not demos.",
+      "theme": "dark"
+    },
+    "xr": {
+      "id": "xr",
+      "label": "XR",
+      "heading": "Spatial computing at work.",
+      "sub": "AR and VR grounded in real jobs — where a heads-up answer beats a handheld manual.",
+      "theme": "light"
+    },
+    "games": {
+      "id": "games",
+      "label": "Games",
+      "heading": "Play, engineered to last.",
+      "sub": "Category-proven mechanics, honest economies, and live-ops that respect players.",
+      "theme": "dark"
+    }
+  },
+  "projects": [
+    {
+      "slug": "meridian",
+      "kind": "web",
+      "name": "Meridian",
+      "category": "Enterprise CRM · AI Copilot",
+      "outcome": "+31% rep productivity",
+      "tagline": "A CRM copilot that turns account history into next actions — drafted, sourced, and one click from sent.",
+      "role": "Product design lead · AI engineering",
+      "platform": "Web · Salesforce + native",
+      "timeline": "2024 · 6 months to GA",
+      "opportunity": [
+        "Reps spent 9+ hours a week re-reading threads and logging activity instead of selling.",
+        "Leadership had no trustworthy forecast because the CRM was always three days stale."
+      ],
+      "strategy": {
+        "goal": "Make the CRM self-maintaining, so every rep-minute goes to the customer.",
+        "decisions": [
+          "Copilot lives inside existing record pages — no new surface to learn.",
+          "Every AI claim links to its source email or call; nothing unsourced ships.",
+          "Auto-logging is default-on with a visible undo, not an opt-in setting."
+        ],
+        "scope": "Account summaries, next-best-action queue, drafted outreach, and pipeline rollups for managers."
+      },
+      "screens": [
+        {
+          "variant": "overview",
+          "title": "Account command center",
+          "caption": "The summary card compresses 14 months of history into six sourced bullets — each one links back to the thread it came from."
+        },
+        {
+          "variant": "record",
+          "title": "Next-action queue",
+          "caption": "Actions are ranked by pipeline impact. Drafts open pre-written; the rep edits tone, not content."
+        },
+        {
+          "variant": "table",
+          "title": "Manager rollup",
+          "caption": "Forecast view flags deals whose activity contradicts their stage — the top ask from every pipeline review."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "+31%",
+          "label": "measured rep productivity (activities per week)"
+        },
+        {
+          "value": "96%",
+          "label": "of AI summaries accepted without edits"
+        },
+        {
+          "value": "−3 days",
+          "label": "forecast staleness, now near-real-time"
+        }
+      ],
+      "learning": "Trust came from citations, not accuracy alone — acceptance doubled the week source links shipped."
+    },
+    {
+      "slug": "atlas-ops",
+      "kind": "web",
+      "name": "Atlas Ops",
+      "category": "ERP · Workflow Automation",
+      "outcome": "−58% manual processing",
+      "tagline": "Invoice-to-pay automation with human judgment exactly where it earns its keep — and nowhere else.",
+      "role": "Product manager · Design",
+      "platform": "Web · SAP + NetSuite integrations",
+      "timeline": "2024 · 4 months to pilot",
+      "opportunity": [
+        "A 40-person AP team keyed invoices by hand; error rework consumed a third of their time.",
+        "Exceptions had no owner — approvals died in email and vendors escalated to sales."
+      ],
+      "strategy": {
+        "goal": "Automate the routine 80% completely; make the exceptional 20% a first-class queue.",
+        "decisions": [
+          "Extraction confidence is visible per-field — low-confidence fields route to review, not whole documents.",
+          "Approvers act from a daily digest with one-tap decisions; the ERP updates itself.",
+          "We shipped the audit trail first — finance wouldn't pilot without it."
+        ],
+        "scope": "Ingestion, 3-way match, exception queue, approval flows, and a full decision ledger."
+      },
+      "screens": [
+        {
+          "variant": "automation",
+          "title": "Flow builder",
+          "caption": "Ops leads compose matching rules visually — every node shows live volume so tuning is evidence-based."
+        },
+        {
+          "variant": "inbox",
+          "title": "Exception queue",
+          "caption": "Only ambiguous fields surface for review. Median exception handled in 40 seconds."
+        },
+        {
+          "variant": "overview",
+          "title": "Spend visibility",
+          "caption": "Real-time accrual view replaced a month-end spreadsheet ritual."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−58%",
+          "label": "manual processing time in pilot quarter"
+        },
+        {
+          "value": "99.2%",
+          "label": "match accuracy on routine invoices"
+        },
+        {
+          "value": "11 days",
+          "label": "faster average payment cycle"
+        }
+      ],
+      "learning": "Field-level confidence routing beat document-level review — it cut human touches 4× without a model change."
+    },
+    {
+      "slug": "pulsehr",
+      "kind": "web",
+      "name": "PulseHR",
+      "category": "HRIS · Internal Tools",
+      "outcome": "82% tickets auto-resolved",
+      "tagline": "An HR service desk that answers from policy — with citations — and hands off to humans gracefully.",
+      "role": "Design lead · LLM systems",
+      "platform": "Web · Slack + Teams embedded",
+      "timeline": "2023–24 · 5 months to org-wide",
+      "opportunity": [
+        "HR spent most of its week answering the same 60 questions, each buried in a 90-page policy PDF.",
+        "Employees didn't trust chatbot answers about leave and pay — one wrong answer is a legal problem."
+      ],
+      "strategy": {
+        "goal": "Answer instantly what policy already answers; route to people what it doesn't.",
+        "decisions": [
+          "Every answer quotes the exact policy clause, versioned by date and region.",
+          "Sensitive topics (compensation, grievances) skip the bot entirely by design.",
+          "HR edits answers in place — corrections retrain routing the same day."
+        ],
+        "scope": "Policy Q&A in Slack/Teams, case handoff, and an HR-side console for oversight and edits."
+      },
+      "screens": [
+        {
+          "variant": "inbox",
+          "title": "Answer with receipts",
+          "caption": "The clause is quoted inline with its effective date — employees stopped double-checking with HR."
+        },
+        {
+          "variant": "record",
+          "title": "Case handoff",
+          "caption": "When the bot steps aside, the human sees full context — no employee repeats themselves."
+        },
+        {
+          "variant": "overview",
+          "title": "HR console",
+          "caption": "Unanswered clusters surface weekly; HR fixes the policy gap, not just the ticket."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "82%",
+          "label": "of tickets resolved without human touch"
+        },
+        {
+          "value": "31 sec",
+          "label": "median time to sourced answer"
+        },
+        {
+          "value": "+44",
+          "label": "eNPS on HR support, up from +9"
+        }
+      ],
+      "learning": "Deciding what the bot must NOT answer was the highest-leverage design decision in the product."
+    },
+    {
+      "slug": "ledgerline",
+      "kind": "web",
+      "name": "Ledgerline",
+      "category": "ERP · Financial Close",
+      "outcome": "5-day close → 2-day",
+      "tagline": "An AI-assisted month-end close that reconciles the obvious and escalates only the judgment calls.",
+      "role": "Product lead · Design",
+      "platform": "Web · Oracle + Snowflake",
+      "timeline": "2023 · 5 months",
+      "opportunity": [
+        "Controllers ran a frantic five-day close every month, chasing reconciliations across ten systems.",
+        "Auditors distrusted spreadsheets nobody could trace back to a source of truth."
+      ],
+      "strategy": {
+        "goal": "Compress the close by automating reconciliation and making every number traceable.",
+        "decisions": [
+          "Auto-match ledgers by default; surface only breaks above a materiality threshold.",
+          "Every figure carries a lineage trail auditors can expand in one click.",
+          "A live close dashboard replaced the status standups entirely."
+        ],
+        "scope": "Reconciliation engine, break queue, lineage trails, and a close-progress dashboard."
+      },
+      "screens": [
+        {
+          "variant": "table",
+          "title": "Break queue",
+          "caption": "Only material breaks reach a human — each pre-annotated with the likely cause."
+        },
+        {
+          "variant": "overview",
+          "title": "Close dashboard",
+          "caption": "Real-time progress across entities retired the daily status meeting."
+        },
+        {
+          "variant": "record",
+          "title": "Lineage trail",
+          "caption": "Any number expands to its full source chain — audits went from weeks to days."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−60%",
+          "label": "close duration (5 days to 2)"
+        },
+        {
+          "value": "94%",
+          "label": "of reconciliations auto-matched"
+        },
+        {
+          "value": "0",
+          "label": "audit adjustments in year one"
+        }
+      ],
+      "learning": "Traceability sold the product internally — controllers adopted it to defend numbers, not to save time."
+    },
+    {
+      "slug": "signal-desk",
+      "kind": "web",
+      "name": "Signal Desk",
+      "category": "Support Ops · AI Triage",
+      "outcome": "−47% first-response time",
+      "tagline": "A support console that drafts, tags, and routes every ticket the instant it lands — agent in control.",
+      "role": "Product design · AI engineering",
+      "platform": "Web · Zendesk + custom",
+      "timeline": "2024 · 4 months",
+      "opportunity": [
+        "Agents spent the first two minutes of every ticket triaging instead of solving.",
+        "Backlogs spiked overnight with no one to categorize or prioritize the queue."
+      ],
+      "strategy": {
+        "goal": "Do the triage before the agent arrives, and draft a reply they can trust or discard.",
+        "decisions": [
+          "Drafts are suggestions, never auto-sent — the agent always presses send.",
+          "Priority is computed from sentiment, account value, and SLA risk together.",
+          "Macros learn from edits, so the draft quality compounds weekly."
+        ],
+        "scope": "Auto-triage, suggested replies, priority scoring, and a macro-learning loop."
+      },
+      "screens": [
+        {
+          "variant": "inbox",
+          "title": "Triaged on arrival",
+          "caption": "Tickets land pre-tagged and prioritized; agents open a queue that's already sorted."
+        },
+        {
+          "variant": "record",
+          "title": "Draft, then send",
+          "caption": "A cited draft waits in the reply box — accepted as-is on 6 of 10 tickets."
+        },
+        {
+          "variant": "overview",
+          "title": "Queue health",
+          "caption": "Leads see SLA risk building before it breaches, not after."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−47%",
+          "label": "first-response time"
+        },
+        {
+          "value": "63%",
+          "label": "of drafts sent with light edits"
+        },
+        {
+          "value": "+18",
+          "label": "CSAT points on triaged tickets"
+        }
+      ],
+      "learning": "Keeping send in human hands raised adoption — agents trusted a tool that never spoke for them."
+    },
+    {
+      "slug": "cohort",
+      "kind": "web",
+      "name": "Cohort",
+      "category": "People Analytics · HR",
+      "outcome": "−22% regretted attrition",
+      "tagline": "An attrition early-warning system that gives managers a reason to act, not just a risk score.",
+      "role": "Design lead · Product",
+      "platform": "Web · Workday + Slack",
+      "timeline": "2023 · 6 months",
+      "opportunity": [
+        "By the time HR saw a resignation, retention was already impossible.",
+        "Risk dashboards existed but told managers nothing they could actually do."
+      ],
+      "strategy": {
+        "goal": "Turn a risk signal into a specific, humane next conversation.",
+        "decisions": [
+          "Every flag comes with a suggested action and the evidence behind it.",
+          "Signals are aggregated to protect individuals from being surveilled.",
+          "Managers, not HR, own the intervention — the tool coaches, it doesn't police."
+        ],
+        "scope": "Risk modeling, manager nudges, intervention playbooks, and outcome tracking."
+      },
+      "screens": [
+        {
+          "variant": "overview",
+          "title": "Team pulse",
+          "caption": "Aggregate signals surface a team's drift before any individual is at risk."
+        },
+        {
+          "variant": "record",
+          "title": "The next conversation",
+          "caption": "Each flag opens with a specific, humane suggested action — not a red score."
+        },
+        {
+          "variant": "table",
+          "title": "What worked",
+          "caption": "Interventions are tracked so playbooks improve on evidence, not lore."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−22%",
+          "label": "regretted attrition year over year"
+        },
+        {
+          "value": "3.1×",
+          "label": "manager action rate vs. prior dashboard"
+        },
+        {
+          "value": "71%",
+          "label": "of flagged conversations rated useful"
+        }
+      ],
+      "learning": "Pairing every risk score with a concrete action was the difference between anxiety and retention."
+    },
+    {
+      "slug": "warehouse-iq",
+      "kind": "web",
+      "name": "Warehouse IQ",
+      "category": "Supply Chain · Internal Tools",
+      "outcome": "−34% stockouts",
+      "tagline": "Demand forecasting and replenishment that planners can override — and see why they'd want to.",
+      "role": "Product · Design",
+      "platform": "Web · SAP + BigQuery",
+      "timeline": "2024 · 5 months",
+      "opportunity": [
+        "Planners fought a black-box forecast they couldn't interrogate, so they ignored it.",
+        "Stockouts and overstock swung wildly because reorder points were set by gut."
+      ],
+      "strategy": {
+        "goal": "Make the forecast legible and steerable, so planners trust and improve it.",
+        "decisions": [
+          "Every forecast shows its drivers — planners adjust assumptions, not just outputs.",
+          "Replenishment suggestions are editable and explain their reasoning.",
+          "Overrides feed back as labeled data, closing the loop."
+        ],
+        "scope": "Demand forecasting, replenishment engine, driver explanations, and override capture."
+      },
+      "screens": [
+        {
+          "variant": "overview",
+          "title": "Forecast, explained",
+          "caption": "Drivers sit beside every prediction so planners can challenge the assumption, not the number."
+        },
+        {
+          "variant": "table",
+          "title": "Replenishment queue",
+          "caption": "Editable suggestions with reasoning — planners approve in bulk, override with confidence."
+        },
+        {
+          "variant": "record",
+          "title": "SKU deep-dive",
+          "caption": "One product's full signal history, from seasonality to supplier lead time."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−34%",
+          "label": "stockout incidents"
+        },
+        {
+          "value": "−19%",
+          "label": "excess inventory carrying cost"
+        },
+        {
+          "value": "88%",
+          "label": "planner acceptance of suggestions"
+        }
+      ],
+      "learning": "Legibility drove adoption — planners trusted a forecast they could argue with."
+    },
+    {
+      "slug": "clause",
+      "kind": "web",
+      "name": "Clause",
+      "category": "Legal Ops · AI Review",
+      "outcome": "3× faster contract review",
+      "tagline": "Contract review that flags deviations from your playbook and drafts the redline for a lawyer to approve.",
+      "role": "Design lead · LLM systems",
+      "platform": "Web · Word + iManage",
+      "timeline": "2024 · 4 months",
+      "opportunity": [
+        "Lawyers re-read standard NDAs line by line, spending expertise on boilerplate.",
+        "Non-standard clauses slipped through under deadline pressure."
+      ],
+      "strategy": {
+        "goal": "Catch every deviation from the playbook and propose the fix — lawyer signs off.",
+        "decisions": [
+          "Compare against the firm's own playbook, not a generic standard.",
+          "Redlines are drafted but never final; a lawyer approves every change.",
+          "Risk is ranked so review time goes to what actually matters."
+        ],
+        "scope": "Clause extraction, playbook comparison, redline drafting, and risk ranking."
+      },
+      "screens": [
+        {
+          "variant": "record",
+          "title": "Deviation report",
+          "caption": "Every clause is graded against the playbook; only real deviations demand attention."
+        },
+        {
+          "variant": "inbox",
+          "title": "Suggested redline",
+          "caption": "A drafted edit sits beside the risky clause — the lawyer approves or rewrites."
+        },
+        {
+          "variant": "overview",
+          "title": "Portfolio risk",
+          "caption": "Legal ops sees exposure across every open agreement at a glance."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "3×",
+          "label": "faster review on standard contracts"
+        },
+        {
+          "value": "100%",
+          "label": "of non-standard clauses flagged in testing"
+        },
+        {
+          "value": "−41%",
+          "label": "outside-counsel spend on routine review"
+        }
+      ],
+      "learning": "Anchoring to the firm's own playbook — not a generic corpus — is what made lawyers trust the flags."
+    },
+    {
+      "slug": "halo",
+      "kind": "mobile",
+      "name": "Halo",
+      "category": "Consumer Health · AI Coaching",
+      "outcome": "4.8★ · 300k MAU",
+      "tagline": "A recovery coach that reads your night and plans your day — in one glance, before coffee.",
+      "role": "Founding designer · Product",
+      "platform": "iOS · Android · Wearables",
+      "timeline": "2023–24 · ongoing",
+      "opportunity": [
+        "Wearables produce charts; people want decisions. Nobody knows what to do with a 62 recovery score.",
+        "Health apps churn hard after week two — novelty dies where habit should start."
+      ],
+      "strategy": {
+        "goal": "One clear recommendation each morning that provably fits into a normal day.",
+        "decisions": [
+          "The home screen is a sentence, not a dashboard — data lives one tap deeper.",
+          "Coaching adapts to calendar reality: a packed day gets a 10-minute plan, not guilt.",
+          "Streaks reward consistency of check-ins, never punish rest days."
+        ],
+        "scope": "Morning brief, adaptive plans, sleep debt model, and wearable sync across five platforms."
+      },
+      "screens": [
+        {
+          "variant": "rings",
+          "title": "The morning brief",
+          "caption": "One sentence, one number, one action. Everything else is a tap away by choice."
+        },
+        {
+          "variant": "plan",
+          "title": "Adaptive day plan",
+          "caption": "Plans negotiate with your calendar — the app never asks for time you don't have."
+        },
+        {
+          "variant": "trend",
+          "title": "Sleep debt, honestly",
+          "caption": "A two-week rolling view replaced daily scores — less noise, better decisions."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "4.8★",
+          "label": "App Store rating across 12k reviews"
+        },
+        {
+          "value": "300k",
+          "label": "monthly active users at month 14"
+        },
+        {
+          "value": "58%",
+          "label": "week-4 retention, 2.1× category median"
+        }
+      ],
+      "learning": "Deleting the dashboard from the home screen was the growth feature — clarity retained users, data didn't."
+    },
+    {
+      "slug": "plink",
+      "kind": "mobile",
+      "name": "Plink",
+      "category": "Personal Finance · AI",
+      "outcome": "+23% savings rate",
+      "tagline": "Money coaching that moves real dollars — small automatic saves, explained in plain language.",
+      "role": "Product design · Growth",
+      "platform": "iOS · Android",
+      "timeline": "2024 · 8 months",
+      "opportunity": [
+        "Budgeting apps demand accounting hobbyists; most people abandon them by payday two.",
+        "Users don't need categorization — they need the confidence that saving won't break their month."
+      ],
+      "strategy": {
+        "goal": "Automate saving decisions users would make themselves if they had an hour every day.",
+        "decisions": [
+          "Safe-to-save is computed from bills and patterns, then moved automatically in small sweeps.",
+          "Every sweep is explained in one sentence and reversible for 24 hours.",
+          "No red. Overspending gets a plan, not a shame color."
+        ],
+        "scope": "Safe-to-save engine, auto-sweeps, bill prediction, and goal envelopes."
+      },
+      "screens": [
+        {
+          "variant": "balance",
+          "title": "One honest number",
+          "caption": "'Yours to spend' nets out bills before they hit — the number people compute in their heads, badly."
+        },
+        {
+          "variant": "sweep",
+          "title": "Explained sweeps",
+          "caption": "Each save says why it's safe. Reversals dropped to 3% once the reason shipped."
+        },
+        {
+          "variant": "goal",
+          "title": "Goals that finish",
+          "caption": "Envelopes fund themselves from sweeps; the app celebrates completion dates, not deposits."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "+23%",
+          "label": "average savings rate after 90 days"
+        },
+        {
+          "value": "$38M",
+          "label": "auto-saved in the first year"
+        },
+        {
+          "value": "71%",
+          "label": "of users keep auto-sweeps on at month 6"
+        }
+      ],
+      "learning": "Reversibility beat permission — asking first killed conversion; undo-for-24-hours built trust and volume."
+    },
+    {
+      "slug": "aura",
+      "kind": "mobile",
+      "name": "Aura",
+      "category": "Lifestyle · Recommendations",
+      "outcome": "42% D30 retention",
+      "tagline": "A taste engine for your city — three great options a day, never an infinite feed.",
+      "role": "Design lead",
+      "platform": "iOS",
+      "timeline": "2023 · 5 months to launch",
+      "opportunity": [
+        "Discovery apps optimize for browsing time; users just want one good plan for tonight.",
+        "Five-star ratings are saturated and gamed — taste is personal, aggregate scores aren't."
+      ],
+      "strategy": {
+        "goal": "Replace the endless feed with a daily shortlist good enough to end the search.",
+        "decisions": [
+          "Exactly three picks a day — scarcity makes each considered, and considered picks train taste fast.",
+          "Taste is learned from behavior (saves, visits, dwell) — we never ask users to rate anything.",
+          "Every pick says why it's for you, in one line, in your history's vocabulary."
+        ],
+        "scope": "Daily three, taste graph, plan-with-friends, and a lightweight save/visited loop."
+      },
+      "screens": [
+        {
+          "variant": "feed",
+          "title": "Today's three",
+          "caption": "Full-bleed cards, one reason each. The whole session is designed to end in a decision."
+        },
+        {
+          "variant": "detail",
+          "title": "The why",
+          "caption": "'Because you loved…' turned recommendations from magic into judgment users could calibrate."
+        },
+        {
+          "variant": "plan",
+          "title": "Plans, not likes",
+          "caption": "A pick becomes a plan with two taps and a shared time — the real success metric."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "42%",
+          "label": "D30 retention at launch cohort"
+        },
+        {
+          "value": "3.1×",
+          "label": "pick-to-visit conversion vs. browse feeds"
+        },
+        {
+          "value": "68%",
+          "label": "of sessions end in a save or a plan"
+        }
+      ],
+      "learning": "Capping supply was the product: three picks outperformed thirty in every retention cohort we ran."
+    },
+    {
+      "slug": "tempo",
+      "kind": "mobile",
+      "name": "Tempo",
+      "category": "Fitness · Adaptive Coaching",
+      "outcome": "2.3× plan completion",
+      "tagline": "A running coach that rewrites tomorrow's run based on how today's actually felt.",
+      "role": "Product design · Founding team",
+      "platform": "iOS · watchOS",
+      "timeline": "2024 · 7 months",
+      "opportunity": [
+        "Static training plans break the first time life gets in the way, and runners quit.",
+        "Effort is personal, but most apps only see pace and distance."
+      ],
+      "strategy": {
+        "goal": "Coach the runner in front of you today, not the plan you wrote three weeks ago.",
+        "decisions": [
+          "Plans adjust nightly from perceived effort, sleep, and completed sessions.",
+          "A missed run reshuffles the week instead of showing a broken streak.",
+          "Coaching speaks in feel ('easy', 'controlled'), not just numbers."
+        ],
+        "scope": "Adaptive plan engine, effort capture, watch workout, and a weekly recap."
+      },
+      "screens": [
+        {
+          "variant": "rings",
+          "title": "Today's session",
+          "caption": "One run, framed by feel. The watch handles the rest hands-free."
+        },
+        {
+          "variant": "plan",
+          "title": "A week that flexes",
+          "caption": "Miss a run and the week reshuffles — no broken streak, no guilt spiral."
+        },
+        {
+          "variant": "trend",
+          "title": "Effort over time",
+          "caption": "Perceived effort trends beside pace, so progress shows even on slow days."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "2.3×",
+          "label": "plan completion vs. static plans"
+        },
+        {
+          "value": "4.7★",
+          "label": "App Store rating"
+        },
+        {
+          "value": "64%",
+          "label": "week-8 retention"
+        }
+      ],
+      "learning": "Framing runs by feel, not pace, kept beginners in — the number was intimidating the people it should have helped."
+    },
+    {
+      "slug": "nourish",
+      "kind": "mobile",
+      "name": "Nourish",
+      "category": "Health · Nutrition AI",
+      "outcome": "−70% logging time",
+      "tagline": "Food logging by photo — snap the plate, confirm, done — with coaching that never shames.",
+      "role": "Design lead · Product",
+      "platform": "iOS · Android",
+      "timeline": "2023–24 · 6 months",
+      "opportunity": [
+        "Manual calorie logging is so tedious that 80% of users quit inside a week.",
+        "Diet apps moralize food, which drives the disordered behavior they claim to prevent."
+      ],
+      "strategy": {
+        "goal": "Make logging a two-second habit and coaching a supportive voice, not a scold.",
+        "decisions": [
+          "Photo-first capture; the AI estimates and the user confirms in one tap.",
+          "No 'good'/'bad' foods — guidance is additive ('add protein'), never punitive.",
+          "Trends over daily totals, so one indulgent meal never derails motivation."
+        ],
+        "scope": "Photo estimation, confirm-and-log flow, additive coaching, and weekly patterns."
+      },
+      "screens": [
+        {
+          "variant": "feed",
+          "title": "Snap and confirm",
+          "caption": "Point at the plate; adjust once if needed. Logging became a reflex, not a chore."
+        },
+        {
+          "variant": "balance",
+          "title": "Additive coaching",
+          "caption": "Guidance suggests what to add, never what to fear — food stayed neutral."
+        },
+        {
+          "variant": "trend",
+          "title": "Patterns, not verdicts",
+          "caption": "Weekly trends replaced daily totals, and the anxiety left with them."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−70%",
+          "label": "time to log a meal"
+        },
+        {
+          "value": "3.4×",
+          "label": "week-2 retention vs. manual logging"
+        },
+        {
+          "value": "4.8★",
+          "label": "rating, praised for 'no guilt'"
+        }
+      ],
+      "learning": "Removing moral language from food logging improved both retention and reported wellbeing."
+    },
+    {
+      "slug": "vault",
+      "kind": "mobile",
+      "name": "Vault",
+      "category": "Wealth · Guided Investing",
+      "outcome": "+2.4× first deposit",
+      "tagline": "Investing for people who find investing intimidating — plain-language guidance, no jargon wall.",
+      "role": "Product design",
+      "platform": "iOS · Android",
+      "timeline": "2024 · 6 months",
+      "opportunity": [
+        "First-time investors freeze at account types, allocations, and acronyms.",
+        "Robo-advisors hide their reasoning, so nervous users never build conviction."
+      ],
+      "strategy": {
+        "goal": "Get a hesitant first-timer to a confident first deposit — and understanding why.",
+        "decisions": [
+          "Onboarding is a conversation, not a form — one plain question at a time.",
+          "Every recommendation explains itself in a sentence a beginner trusts.",
+          "Volatility is previewed honestly up front, so dips don't trigger panic-selling."
+        ],
+        "scope": "Conversational onboarding, explainable portfolios, and a calm downturn experience."
+      },
+      "screens": [
+        {
+          "variant": "balance",
+          "title": "Start with a sentence",
+          "caption": "One plain question at a time replaced the wall of account types and acronyms."
+        },
+        {
+          "variant": "goal",
+          "title": "Why this portfolio",
+          "caption": "Each allocation explains itself — beginners built conviction, not just balances."
+        },
+        {
+          "variant": "trend",
+          "title": "Honest about dips",
+          "caption": "Volatility is previewed up front, so a downturn reads as expected, not alarming."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "+2.4×",
+          "label": "first-deposit conversion"
+        },
+        {
+          "value": "−38%",
+          "label": "panic-sell rate during a correction"
+        },
+        {
+          "value": "4.6★",
+          "label": "rating from first-time investors"
+        }
+      ],
+      "learning": "Explaining the 'why' up front prevented the panic-sells that quietly destroy long-term returns."
+    },
+    {
+      "slug": "lumen",
+      "kind": "mobile",
+      "name": "Lumen",
+      "category": "Mental Health · Journaling",
+      "outcome": "51% D30 retention",
+      "tagline": "A reflective journal that notices your patterns and asks the question you needed — gently.",
+      "role": "Design lead · Product",
+      "platform": "iOS",
+      "timeline": "2023 · 5 months",
+      "opportunity": [
+        "Blank-page journaling apps intimidate the people who'd benefit most.",
+        "Mood trackers collect data but rarely give anything meaningful back."
+      ],
+      "strategy": {
+        "goal": "Lower the barrier to reflection and return something worth the vulnerability.",
+        "decisions": [
+          "Entries start from a gentle prompt tuned to recent context, never a blank page.",
+          "Reflections surface patterns supportively — observations, not diagnoses.",
+          "Everything stays private and on-device by default; trust is the product."
+        ],
+        "scope": "Contextual prompts, private reflections, pattern surfacing, and a calm daily ritual."
+      },
+      "screens": [
+        {
+          "variant": "feed",
+          "title": "Never a blank page",
+          "caption": "A gentle, context-aware prompt lowers the barrier from 'what do I write' to 'here's a start'."
+        },
+        {
+          "variant": "detail",
+          "title": "Patterns, kindly",
+          "caption": "Reflections surface trends as supportive observations — never a diagnosis."
+        },
+        {
+          "variant": "plan",
+          "title": "A quiet ritual",
+          "caption": "A two-minute evening moment that people actually kept coming back to."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "51%",
+          "label": "D30 retention"
+        },
+        {
+          "value": "4.9★",
+          "label": "App Store rating"
+        },
+        {
+          "value": "6.2",
+          "label": "avg. entries per user per week"
+        }
+      ],
+      "learning": "On-device privacy wasn't a feature footnote — it was the precondition for anyone writing honestly."
+    },
+    {
+      "slug": "roam",
+      "kind": "mobile",
+      "name": "Roam",
+      "category": "Travel · AI Planning",
+      "outcome": "−80% planning time",
+      "tagline": "Trip planning that builds a real day-by-day itinerary in minutes — then flexes when plans change.",
+      "role": "Product design",
+      "platform": "iOS · Android",
+      "timeline": "2024 · 5 months",
+      "opportunity": [
+        "Planning a trip means 30 open tabs and a spreadsheet nobody enjoys.",
+        "Rigid itineraries shatter the moment a flight slips or the weather turns."
+      ],
+      "strategy": {
+        "goal": "Turn a vague idea into a real, editable itinerary — and keep it alive during the trip.",
+        "decisions": [
+          "Generate a full day-by-day plan from a few preferences, then let users tug it around.",
+          "Bookings and reservations live inside the plan, not scattered across inboxes.",
+          "Disruptions re-plan the day in place instead of collapsing the whole trip."
+        ],
+        "scope": "Itinerary generation, drag-to-edit days, booking capture, and live re-planning."
+      },
+      "screens": [
+        {
+          "variant": "feed",
+          "title": "A real itinerary, fast",
+          "caption": "A few preferences become a full day-by-day plan you can immediately reshape."
+        },
+        {
+          "variant": "plan",
+          "title": "Tug it around",
+          "caption": "Drag any day; the plan rebalances travel time and bookings automatically."
+        },
+        {
+          "variant": "detail",
+          "title": "Alive on the road",
+          "caption": "A delayed flight re-plans the afternoon in place — the trip bends, it doesn't break."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−80%",
+          "label": "time from idea to booked itinerary"
+        },
+        {
+          "value": "4.7★",
+          "label": "App Store rating"
+        },
+        {
+          "value": "2.9×",
+          "label": "trips planned per active user"
+        }
+      ],
+      "learning": "In-trip re-planning, not initial generation, was the feature that turned one-time planners into repeat users."
+    },
+    {
+      "slug": "overlay",
+      "kind": "xr",
+      "name": "Overlay",
+      "category": "AR · Field Operations",
+      "outcome": "−41% repair time",
+      "tagline": "Heads-up procedures for field technicians — the manual pinned to the machine, hands free.",
+      "role": "Product design · Spatial UX",
+      "platform": "HoloLens 2 · RealWear · iOS AR",
+      "timeline": "2024 · 7 months to field pilot",
+      "opportunity": [
+        "Technicians juggle a 400-page PDF on a phone while working two-handed on live equipment.",
+        "Expert knowledge walks out at retirement; new techs take 18 months to reach solo competence."
+      ],
+      "strategy": {
+        "goal": "Put the right step, torque value, and warning in the technician's line of sight — nothing else.",
+        "decisions": [
+          "Anchored labels over parts beat floating windows — spatial only where space adds meaning.",
+          "Voice-first controls; gaze fallback. Gloved hands never touch a screen.",
+          "Remote expert joins as an annotation layer on the tech's view, not a video call beside it."
+        ],
+        "scope": "Procedure overlays, part recognition, voice navigation, and see-what-I-see expert assist."
+      },
+      "screens": [
+        {
+          "variant": "hud",
+          "title": "Step in sight",
+          "caption": "The current step is anchored to the component. Peripheral UI fades until summoned by voice."
+        },
+        {
+          "variant": "assist",
+          "title": "Expert on your shoulder",
+          "caption": "Remote experts draw directly on the machine — 'that valve' becomes unambiguous."
+        },
+        {
+          "variant": "hud",
+          "title": "Checks that count",
+          "caption": "Torque and safety confirmations are logged hands-free — compliance became a byproduct of the flow."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−41%",
+          "label": "mean repair time across the pilot fleet"
+        },
+        {
+          "value": "−67%",
+          "label": "first-visit errors by new technicians"
+        },
+        {
+          "value": "9 mo",
+          "label": "faster ramp to solo competence"
+        }
+      ],
+      "learning": "Restraint is the spatial superpower — every element we removed from the field of view improved completion time."
+    },
+    {
+      "slug": "vantage",
+      "kind": "xr",
+      "name": "Vantage",
+      "category": "VR · Enterprise Training",
+      "outcome": "2.4× skill retention",
+      "tagline": "Rehearsal for high-stakes work — practice the dangerous day a hundred times before it happens.",
+      "role": "Product manager · UX",
+      "platform": "Quest 3 · PC VR",
+      "timeline": "2023–24 · 6 months",
+      "opportunity": [
+        "Classroom safety training certifies attendance, not competence — and incidents proved it.",
+        "Live drills for rare emergencies are expensive, disruptive, and impossible to standardize."
+      ],
+      "strategy": {
+        "goal": "Make rare, dangerous scenarios rehearsable weekly — and measure decisions, not presence.",
+        "decisions": [
+          "Scenarios branch on trainee decisions; there is no passive watching mode.",
+          "Instructors get a decision replay, not a score — coaching stays human.",
+          "Sessions cap at 12 minutes — comfort research set the ceiling, not content."
+        ],
+        "scope": "Six emergency scenarios, decision analytics, instructor replay, and LMS integration."
+      },
+      "screens": [
+        {
+          "variant": "space",
+          "title": "The scenario floor",
+          "caption": "Environments recreate the actual site from scans — muscle memory transfers because geometry does."
+        },
+        {
+          "variant": "branch",
+          "title": "Decisions, branching",
+          "caption": "Every choice forks the scenario. Wrong calls play out — safely — instead of being buzzed."
+        },
+        {
+          "variant": "space",
+          "title": "Instructor replay",
+          "caption": "Trainers scrub a bird's-eye replay of choices and hesitations — debriefs got specific."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "2.4×",
+          "label": "skill retention at 90 days vs. classroom"
+        },
+        {
+          "value": "−83%",
+          "label": "training cost per certified employee"
+        },
+        {
+          "value": "12k",
+          "label": "sessions in year one across 3 plants"
+        }
+      ],
+      "learning": "Consequences teach better than corrections — letting wrong choices play out drove the retention gains."
+    },
+    {
+      "slug": "showroom",
+      "kind": "xr",
+      "name": "Showroom",
+      "category": "AR · Retail Commerce",
+      "outcome": "−32% returns",
+      "tagline": "See the furniture in your room, at true scale, before you buy — and buy with far fewer regrets.",
+      "role": "Product design · Spatial UX",
+      "platform": "iOS AR · Android AR",
+      "timeline": "2024 · 5 months",
+      "opportunity": [
+        "Furniture returns are brutal: the thing looks wrong at home and shipping it back costs everyone.",
+        "Flat product photos can't answer the only question that matters — does it fit my space?"
+      ],
+      "strategy": {
+        "goal": "Let people answer 'does it fit, does it match' at true scale before they commit.",
+        "decisions": [
+          "True-to-scale placement with real materials — accuracy over flashy effects.",
+          "One-tap swap of finishes in place, so comparison happens in the room.",
+          "Checkout lives inside the AR view; the decision and the purchase are one motion."
+        ],
+        "scope": "True-scale placement, finish swapping, room capture, and in-context checkout."
+      },
+      "screens": [
+        {
+          "variant": "space",
+          "title": "True to your room",
+          "caption": "Placed at real scale with accurate materials — the fit question answers itself."
+        },
+        {
+          "variant": "assist",
+          "title": "Swap in place",
+          "caption": "Change finish or size without leaving the room — comparison happens where it matters."
+        },
+        {
+          "variant": "hud",
+          "title": "Buy from the view",
+          "caption": "Checkout sits inside the AR scene, so seeing and deciding are one motion."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−32%",
+          "label": "return rate on AR-previewed orders"
+        },
+        {
+          "value": "+27%",
+          "label": "conversion when AR was used"
+        },
+        {
+          "value": "2.1×",
+          "label": "time spent evaluating vs. photo galleries"
+        }
+      ],
+      "learning": "Scale accuracy beat visual polish — one wrong dimension destroyed all the trust the render built."
+    },
+    {
+      "slug": "blueprint",
+      "kind": "xr",
+      "name": "Blueprint",
+      "category": "AR · Construction",
+      "outcome": "−45% rework",
+      "tagline": "The model, overlaid on the site — so crews build what was designed, and catch clashes before concrete.",
+      "role": "Product · Spatial UX",
+      "platform": "HoloLens 2 · iPad Pro",
+      "timeline": "2023–24 · 8 months",
+      "opportunity": [
+        "Crews build from 2D drawings and discover clashes after the pour — the most expensive time to find them.",
+        "Reconciling as-built reality with the BIM model happened weeks late, in the office."
+      ],
+      "strategy": {
+        "goal": "Put the design in the space, on site, so errors surface before they're set in concrete.",
+        "decisions": [
+          "Millimeter-grade anchoring — a misaligned overlay is worse than no overlay.",
+          "Clash detection is on-site and immediate, not a next-week office report.",
+          "As-built capture feeds the model back, closing the loop with the office."
+        ],
+        "scope": "Model overlay, precise anchoring, on-site clash detection, and as-built capture."
+      },
+      "screens": [
+        {
+          "variant": "space",
+          "title": "Design on the slab",
+          "caption": "The BIM model, anchored to the real structure — crews build what was actually drawn."
+        },
+        {
+          "variant": "branch",
+          "title": "Clashes, before concrete",
+          "caption": "Conflicts surface on site, in the moment, not in an office report weeks later."
+        },
+        {
+          "variant": "assist",
+          "title": "Capture the as-built",
+          "caption": "Reality feeds back into the model, so the office and the site finally agree."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "−45%",
+          "label": "rework on overlaid trades"
+        },
+        {
+          "value": "−60%",
+          "label": "clash-related change orders"
+        },
+        {
+          "value": "3 wks",
+          "label": "faster model reconciliation"
+        }
+      ],
+      "learning": "Anchoring precision was everything — trust in the overlay collapsed the first time it drifted a few centimeters."
+    },
+    {
+      "slug": "stackline",
+      "kind": "game",
+      "name": "Stackline",
+      "category": "Mobile Puzzle · Live Ops",
+      "outcome": "Top-10 category launch",
+      "tagline": "A one-thumb puzzle with a fair economy — easy to learn, honest to master, kind to your wallet.",
+      "role": "Game design · Product",
+      "platform": "iOS · Android",
+      "timeline": "2023 · live since launch",
+      "opportunity": [
+        "The puzzle category is proven but poisoned — pay-to-win walls torch trust and reviews.",
+        "Session-length data said commutes; most competitors design for couches."
+      ],
+      "strategy": {
+        "goal": "Win the category on generosity — monetize patience, never progress.",
+        "decisions": [
+          "Every level is beatable free; purchases buy cosmetics and undo tokens only.",
+          "Difficulty is a designed curve with breathing room — relief levels are placed, not random.",
+          "Daily puzzle is the same for everyone — shared difficulty made it social for free."
+        ],
+        "scope": "400 launch levels, daily puzzle, seasons, and a cosmetic-only economy."
+      },
+      "screens": [
+        {
+          "variant": "puzzle",
+          "title": "The core loop",
+          "caption": "One thumb, one mechanic, escalating elegance. Tutorial is level one playing itself for 4 seconds."
+        },
+        {
+          "variant": "daily",
+          "title": "The daily",
+          "caption": "One shared puzzle a day drove 34% of all sessions — and the group chats came free."
+        },
+        {
+          "variant": "season",
+          "title": "Seasons, not paywalls",
+          "caption": "Seasonal cosmetics carry the economy. ARPU is lower than genre median; LTV is higher."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "Top 10",
+          "label": "category rank in launch month"
+        },
+        {
+          "value": "45%",
+          "label": "D1 retention · 22% D7"
+        },
+        {
+          "value": "4.7★",
+          "label": "store rating — 'fair' is the top review word"
+        }
+      ],
+      "learning": "Generosity compounded: refusing pay-to-win cost revenue in month one and multiplied it by month six."
+    },
+    {
+      "slug": "driftbound",
+      "kind": "game",
+      "name": "Driftbound",
+      "category": "Arcade Racing · Seasonal",
+      "outcome": "45% D1 retention",
+      "tagline": "Sixty-second races with a skill ceiling — arcade drift handling tuned until your hands smile.",
+      "role": "Product · Feel & systems design",
+      "platform": "iOS · Android · Switch",
+      "timeline": "2024 · concept to soft launch",
+      "opportunity": [
+        "Mobile racers split into idle tappers and sim ports; the arcade middle was empty and proven hungry.",
+        "Short-session play was underserved: nobody built a racer for the elevator wait."
+      ],
+      "strategy": {
+        "goal": "One perfect input — drift — with depth that survives a thousand hours.",
+        "decisions": [
+          "Races are 60 seconds flat; mastery compresses into lines and timing, not grinding.",
+          "Ghost racing over live PvP — all the rivalry, none of the latency or toxicity.",
+          "Tracks are hand-built weekly, not procedurally generated — authored corners create shared vocabulary."
+        ],
+        "scope": "Drift handling model, 24 launch tracks, weekly track drops, ghosts, and time-trial leagues."
+      },
+      "screens": [
+        {
+          "variant": "race",
+          "title": "The feel",
+          "caption": "Handling was tuned across 200+ playtest builds — the drift arc is the entire product."
+        },
+        {
+          "variant": "ghost",
+          "title": "Ghost rivalries",
+          "caption": "Racing a friend's ghost drove 2.6× more rematches than leaderboards alone."
+        },
+        {
+          "variant": "league",
+          "title": "Weekly leagues",
+          "caption": "Small 30-player brackets keep every rank climbable — everyone's top 10 somewhere."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "45%",
+          "label": "D1 retention in soft launch"
+        },
+        {
+          "value": "7.2",
+          "label": "average sessions per day per player"
+        },
+        {
+          "value": "92nd",
+          "label": "percentile session frequency for genre"
+        }
+      ],
+      "learning": "Feel is a spec: treating handling curves as the core product — with playtest cadence to match — beat every content bet."
+    },
+    {
+      "slug": "rootbound",
+      "kind": "game",
+      "name": "Rootbound",
+      "category": "Cozy Sim · Premium",
+      "outcome": "89 Metacritic",
+      "tagline": "A farming-and-building sim about restoration, not extraction — the cozy category done with real craft.",
+      "role": "Product · Systems & UX design",
+      "platform": "Switch · PC · iOS",
+      "timeline": "2023–24 · 14 months",
+      "opportunity": [
+        "The cozy category is proven and beloved but crowded with shallow, extractive clones.",
+        "Players say they want relaxation, but retention lives in gentle, legible progression."
+      ],
+      "strategy": {
+        "goal": "Deliver genuine calm with enough systemic depth to keep players for a hundred hours.",
+        "decisions": [
+          "No timers, no fail states — pressure comes from curiosity, never punishment.",
+          "Every system is legible on sight; discovery replaces tutorials.",
+          "Restoration theme drives mechanics — you heal the land, you don't strip it."
+        ],
+        "scope": "Farming and building loops, seasons, restoration questlines, and an accessibility-first UI."
+      },
+      "screens": [
+        {
+          "variant": "puzzle",
+          "title": "Systems you can read",
+          "caption": "Every mechanic is legible on sight — discovery replaced tutorials entirely."
+        },
+        {
+          "variant": "season",
+          "title": "Seasons of restoration",
+          "caption": "Progress heals the world rather than strip-mining it — the theme is the mechanic."
+        },
+        {
+          "variant": "daily",
+          "title": "Calm, not idle",
+          "caption": "No timers or fail states; the pull is curiosity, and it kept players for a hundred hours."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "89",
+          "label": "Metacritic score"
+        },
+        {
+          "value": "1.2M",
+          "label": "units sold in first six months"
+        },
+        {
+          "value": "36 hrs",
+          "label": "median completion playtime"
+        }
+      ],
+      "learning": "Legibility was the retention engine — players stayed for systems they could understand and master at their own pace."
+    },
+    {
+      "slug": "nightreach",
+      "kind": "game",
+      "name": "Nightreach",
+      "category": "Co-op Roguelite · Live",
+      "outcome": "63% D7 retention",
+      "tagline": "A drop-in co-op roguelite where every run tells a story — designed so friends actually finish together.",
+      "role": "Product · Systems design",
+      "platform": "PC · Console",
+      "timeline": "2024 · early access",
+      "opportunity": [
+        "Roguelites thrive solo but fracture in co-op — mismatched progress splits friend groups fast.",
+        "Drop-in multiplayer usually punishes the newcomer and bores the veteran."
+      ],
+      "strategy": {
+        "goal": "Make co-op runs that stay fun regardless of who's more experienced or how long they can stay.",
+        "decisions": [
+          "Difficulty and rewards scale to the group, so no one is carried or bored.",
+          "Runs are self-contained stories — you can drop after one and feel complete.",
+          "Progression is shared and account-light, so friends never fall out of sync."
+        ],
+        "scope": "Scaling run engine, drop-in netcode UX, shared meta-progression, and seasonal events."
+      },
+      "screens": [
+        {
+          "variant": "puzzle",
+          "title": "Runs that scale",
+          "caption": "Difficulty and loot flex to the group — the newcomer contributes, the veteran isn't bored."
+        },
+        {
+          "variant": "league",
+          "title": "A story per run",
+          "caption": "Each run resolves on its own, so friends can drop after one and still feel it landed."
+        },
+        {
+          "variant": "season",
+          "title": "In sync, always",
+          "caption": "Shared, account-light progression means groups never drift apart between sessions."
+        }
+      ],
+      "outcomes": [
+        {
+          "value": "63%",
+          "label": "D7 retention in early access"
+        },
+        {
+          "value": "3.4",
+          "label": "average players per session"
+        },
+        {
+          "value": "'Very Positive'",
+          "label": "Steam review standing"
+        }
+      ],
+      "learning": "Scaling to the group, not the individual, was what kept friend groups playing together past the first week."
+    }
+  ]
+}

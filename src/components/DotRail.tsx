@@ -18,13 +18,16 @@ export function DotRail({
   sections,
   active,
   onGo,
+  light = false,
 }: {
   sections: SectionRef[];
   active: number;
   onGo: (id: string) => void;
+  /** Matches the active section's theme so the rail reads on any ground. */
+  light?: boolean;
 }) {
   return (
-    <nav className="dots" aria-label="Sections">
+    <nav className={`dots${light ? " is-light" : ""}`} aria-label="Sections">
       {sections.map((s, i) => (
         <MagneticButton
           key={s.id}

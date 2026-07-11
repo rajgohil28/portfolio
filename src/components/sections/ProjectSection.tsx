@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { byKind, sections, PAGE_SIZE, type Kind, type Project } from "../../content/portfolio";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
@@ -30,20 +30,13 @@ const LANDSCAPE: Slot[] = [
   { left: "57%", top: "53%", w: "34%", r: 0, z: 3, fx: "52vw", fy: "34vh", fr: "-14deg" },
 ];
 
-const PORTRAIT: Slot[] = [
-  { left: "5%", top: "13%", w: "20%", r: 0, z: 3, fx: "-52vw", fy: "-30vh", fr: "-18deg" },
-  { left: "33%", top: "27%", w: "19%", r: 0, z: 2, fx: "-20vw", fy: "60vh", fr: "12deg" },
-  { left: "56%", top: "8%", w: "20%", r: 0, z: 4, fx: "24vw", fy: "-55vh", fr: "15deg" },
-  { left: "76%", top: "33%", w: "18%", r: 0, z: 3, fx: "50vw", fy: "36vh", fr: "-14deg" },
-];
-
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
   return out;
 }
 
-function ReelCard({ project, slot, i, num }: { project: Project; slot: Slot; i: number; num: number }) {
+function ReelCard({ project, slot, i }: { project: Project; slot: Slot; i: number }) {
   return (
     <a
       className="reel-card"
@@ -101,8 +94,8 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
   const portrait = false;
   const slots = LANDSCAPE;
   const reduced = useReducedMotion();
-  // The light "gradient white" treatment alternates: Enterprise AI (web) and Spatial (xr)
-  const light = kind === "web" || kind === "xr";
+  // Section theme comes from content.json (CMS-controlled).
+  const light = meta.theme === "light";
 
   const [page, setPage] = useState(0);
   const [phase, setPhase] = useState<"idle" | "exit" | "enter">("idle");
@@ -129,6 +122,43 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
       }, 780);
     }, 540);
   };
+
+  /* Keyboard (←/→) and horizontal trackpad wheel page the active reel —
+     drag is the pointer affordance, these are its peers. */
+  const sectionRef = useRef<HTMLElement>(null);
+  const paginateRef = useRef(paginate);
+  paginateRef.current = paginate;
+  const wheelAt = useRef(0);
+
+  useEffect(() => {
+    if (!active || pageCount < 2) return;
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (t.closest?.("input, textarea, select")) return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        paginateRef.current(1);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        paginateRef.current(-1);
+      }
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 24) return;
+      e.preventDefault();
+      const now = performance.now();
+      if (now - wheelAt.current < 900) return; // trackpads emit streams
+      wheelAt.current = now;
+      paginateRef.current(e.deltaX > 0 ? 1 : -1);
+    };
+    const sec = sectionRef.current;
+    window.addEventListener("keydown", onKey);
+    sec?.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      sec?.removeEventListener("wheel", onWheel);
+    };
+  }, [active, pageCount]);
 
   /* Drag / swipe to page. Vertical gestures stay with the scroll
      container (touch-action: pan-y); horizontal ones are ours. */
@@ -181,6 +211,7 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
 
   return (
     <section
+      ref={sectionRef}
       id={meta.id}
       className={`sec reel-sec${portrait ? " reel-portrait" : ""}${light ? " sec-light" : ""}${active ? " is-active" : ""}`}
       aria-label={meta.label}
@@ -211,22 +242,39 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
         onClickCapture={onClickCapture}
       >
         {cards.map((p, i) => (
-          <ReelCard key={p.slug} project={p} slot={slots[i]} i={i} num={page * PAGE_SIZE + i + 1} />
+          <ReelCard key={p.slug} project={p} slot={slots[i]} i={i} />
         ))}
       </div>
 
       {pageCount > 1 && (
-        <div className={`drag-hint ${isPressing ? 'is-pressing' : ''}`}>
-          {isPressing ? (
-            <span className="drag-hint-arrows">
-              <span className="arrow-left">{'<<<<'}</span>
-              <span className="arrow-dot">{'•'}</span>
-              <span className="arrow-right">{'>>>>'}</span>
-            </span>
-          ) : (
-            <span className="drag-hint-text">Hold and drag</span>
-          )}
-        </div>
+        <>
+          <div className="reel-pages" role="tablist" aria-label={`${meta.label} pages`}>
+            {pages.map((_, i) => (
+              <button
+                key={i}
+                role="tab"
+                className={`reel-page-dot${i === page ? " on" : ""}`}
+                aria-selected={i === page}
+                aria-label={`Page ${i + 1} of ${pageCount}`}
+                onClick={() => i !== page && paginate(i > page ? 1 : -1)}
+              />
+            ))}
+          </div>
+          <div className={`drag-hint ${isPressing ? 'is-pressing' : ''}`}>
+            {isPressing ? (
+              <span className="drag-hint-arrows">
+                <span className="arrow-left">{'<<<<'}</span>
+                <span className="arrow-dot">{'•'}</span>
+                <span className="arrow-right">{'>>>>'}</span>
+              </span>
+            ) : (
+              <span className="drag-hint-text">Hold and drag</span>
+            )}
+          </div>
+          <span className="visually-hidden" aria-live="polite">
+            Projects {page * PAGE_SIZE + 1}–{page * PAGE_SIZE + cards.length} of {all.length}
+          </span>
+        </>
       )}
     </section>
   );

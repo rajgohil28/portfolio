@@ -14,6 +14,25 @@ export function CaseStudy({ project, onClose }: { project: Project; onClose: () 
     scrollRef.current?.scrollTo(0, 0);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
+      // Focus trap: Tab cycles inside the dialog.
+      if (e.key === "Tab") {
+        const root = scrollRef.current;
+        if (!root) return;
+        const els = root.querySelectorAll<HTMLElement>(
+          'a[href], button, [tabindex]:not([tabindex="-1"])',
+        );
+        if (!els.length) return;
+        const first = els[0];
+        const last = els[els.length - 1];
+        const focused = document.activeElement;
+        if (e.shiftKey && (focused === first || !root.contains(focused))) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && focused === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {

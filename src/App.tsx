@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { bySlug } from "./content/portfolio";
+import { bySlug, sections } from "./content/portfolio";
 import { DotRail, type SectionRef } from "./components/DotRail";
 import { Intro } from "./components/sections/Intro";
 import { ProjectSection } from "./components/sections/ProjectSection";
@@ -7,14 +7,15 @@ import { Closing } from "./components/sections/Closing";
 import { CaseStudy } from "./components/CaseStudy";
 import { Cursor } from "./components/Cursor";
 import { useReducedMotion } from "./hooks/useReducedMotion";
+import { AdminApp } from "./admin/AdminApp";
 
-const SECTIONS: SectionRef[] = [
-  { id: "intro", label: "Intro" },
-  { id: "web-apps", label: "Web Apps" },
-  { id: "mobile-apps", label: "Mobile Apps" },
-  { id: "xr", label: "XR" },
-  { id: "games", label: "Games" },
-  { id: "contact", label: "Contact" },
+const SECTIONS: (SectionRef & { theme: "light" | "dark" })[] = [
+  { id: "intro", label: "Intro", theme: "dark" },
+  { id: "web-apps", label: "Web Apps", theme: sections.web.theme },
+  { id: "mobile-apps", label: "Mobile Apps", theme: sections.mobile.theme },
+  { id: "xr", label: "XR", theme: sections.xr.theme },
+  { id: "games", label: "Games", theme: sections.games.theme },
+  { id: "contact", label: "Contact", theme: "dark" },
 ];
 
 function slugFromHash(): string | null {
@@ -23,6 +24,7 @@ function slugFromHash(): string | null {
 }
 
 export default function App() {
+  if (window.location.pathname === "/admin") return <AdminApp />;
   const [slug, setSlug] = useState<string | null>(slugFromHash);
   const [active, setActive] = useState(0);
   const snapRef = useRef<HTMLElement>(null);
@@ -41,6 +43,11 @@ export default function App() {
     window.history.replaceState(null, "", window.location.pathname + window.location.search);
     setSlug(null);
   }, []);
+
+  /* A hash that doesn't resolve to a project falls back to home. */
+  useEffect(() => {
+    if (slug && !project) closeCase();
+  }, [slug, project, closeCase]);
 
   /* Lock and hide the page behind the case study. */
   useEffect(() => {
@@ -135,7 +142,14 @@ export default function App() {
         <Closing active={active === 5} />
       </main>
       <div className="glass-edges" aria-hidden="true" />
-      {!project && <DotRail sections={SECTIONS} active={active} onGo={go} />}
+      {!project && (
+        <DotRail
+          sections={SECTIONS}
+          active={active}
+          onGo={go}
+          light={SECTIONS[active]?.theme === "light"}
+        />
+      )}
       {project && <CaseStudy project={project} onClose={closeCase} />}
       <Cursor />
     </>
