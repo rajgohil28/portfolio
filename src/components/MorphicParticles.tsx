@@ -21,8 +21,8 @@ interface Particle {
   speed: number;
 }
 
-// Ultra-dense, hyper-vibrant cybernetic neural ocean with 6750 particles.
-const PARTICLE_COUNT = 6750; 
+// Ultra-dense, hyper-vibrant cybernetic neural ocean — doubled to 13500 particles for sharply defined icon shapes.
+const PARTICLE_COUNT = 13500;
 
 export function MorphicParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -122,8 +122,8 @@ export function MorphicParticles() {
           originY: ry,
           vx: (Math.random() - 0.5) * 0.3,
           vy: (Math.random() - 0.5) * 0.3,
-          // Highly optimized glow ratio: draw 6% as glowing core synapses (~400 nodes), 94% as fast standard blue nodes.
-          size: Math.random() < 0.06 ? Math.random() * 2.0 + 1.2 : Math.random() * 0.8 + 0.4,
+          // Glow ratio halved to 3% so the expensive shadowBlur synapses stay at ~400 nodes after doubling the count.
+          size: Math.random() < 0.03 ? Math.random() * 2.0 + 1.2 : Math.random() * 0.8 + 0.4,
           // Mass variation (between 0.6 and 1.8) makes some particles heavy/sluggish and others light/zippy
           mass: 0.6 + Math.random() * 1.2,
           // Magnetic deflection factor (-2.5 to 2.5) mapping particles to different curved field lines
@@ -165,15 +165,13 @@ export function MorphicParticles() {
       let cx = width / 2;
       let cy = height * 0.44; // vertical empty middle
       
-      // On desktop, alternate icons on left and right empty columns
+      // On desktop, every formation lands somewhere new: random side, random distance
+      // from the edge, random height — bounded to the empty side columns so the icon
+      // never overlaps the central typography and never clips off-screen
       if (!isMobile) {
-        if (shapeIndex === 1 || shapeIndex === 3) {
-          // Left Empty Column (AI / Spatial Visor)
-          cx = width * 0.20;
-        } else {
-          // Right Empty Column (Consumer Phone / Game Controller)
-          cx = width * 0.80;
-        }
+        const edgeBand = 0.15 + Math.random() * 0.05; // icon center sits 15%–20% in from the edge
+        cx = Math.random() < 0.5 ? width * edgeBand : width * (1 - edgeBand);
+        cy = height * (0.32 + Math.random() * 0.26);
       } else {
         // On mobile, position them in the top-center empty space above your name
         cy = height * 0.22; 
@@ -192,87 +190,53 @@ export function MorphicParticles() {
       tempCtx.lineJoin = "round";
 
       if (shapeIndex === 1) {
-        // 🧠 HYPER-DETAILED CEREBRAL BRAIN (AI) - Wavy gyri, central fissure, cerebellum, spinal stem & synapse junctions
-        const r = scale * 0.48;
+        // 🧠 WALNUT-STYLE AI BRAIN (front view) — two wide mirrored hemispheres with nested folds.
+        // Deliberately wide, flat and stemless: the old tall dome + long spinal stem read as a tree.
+        const r = scale * 0.5;
 
-        // 1. Left Cerebral Hemisphere Outer Outline (Corrugated, wavy lobes)
+        // 1. Left Hemisphere Outline (wide rounded lobe)
         tempCtx.beginPath();
-        tempCtx.moveTo(cx, cy - r * 0.72);
-        tempCtx.bezierCurveTo(cx - r * 0.55, cy - r * 0.95, cx - r * 0.98, cy - r * 0.42, cx - r * 0.98, cy - r * 0.1);
-        tempCtx.bezierCurveTo(cx - r * 1.0, cy + r * 0.24, cx - r * 0.78, cy + r * 0.54, cx - r * 0.42, cy + r * 0.54);
-        tempCtx.bezierCurveTo(cx - r * 0.22, cy + r * 0.54, cx - r * 0.12, cy + r * 0.42, cx, cy + r * 0.34);
+        tempCtx.moveTo(cx, cy - r * 0.68);
+        tempCtx.bezierCurveTo(cx - r * 0.5, cy - r * 0.92, cx - r * 1.02, cy - r * 0.5, cx - r * 1.0, cy - r * 0.05);
+        tempCtx.bezierCurveTo(cx - r * 0.98, cy + r * 0.42, cx - r * 0.55, cy + r * 0.66, cx, cy + r * 0.5);
         tempCtx.stroke();
 
-        // 2. Right Cerebral Hemisphere Outer Outline (Mirrored)
+        // 2. Right Hemisphere Outline (exact mirror)
         tempCtx.beginPath();
-        tempCtx.moveTo(cx, cy - r * 0.72);
-        tempCtx.bezierCurveTo(cx + r * 0.55, cy - r * 0.95, cx + r * 0.98, cy - r * 0.42, cx + r * 0.98, cy - r * 0.1);
-        tempCtx.bezierCurveTo(cx + r * 1.0, cy + r * 0.24, cx + r * 0.78, cy + r * 0.54, cx + r * 0.42, cy + r * 0.54);
+        tempCtx.moveTo(cx, cy - r * 0.68);
+        tempCtx.bezierCurveTo(cx + r * 0.5, cy - r * 0.92, cx + r * 1.02, cy - r * 0.5, cx + r * 1.0, cy - r * 0.05);
+        tempCtx.bezierCurveTo(cx + r * 0.98, cy + r * 0.42, cx + r * 0.55, cy + r * 0.66, cx, cy + r * 0.5);
         tempCtx.stroke();
 
-        // 3. Central Vertical Fissure
+        // 3. Central Fissure (the walnut seam between the hemispheres)
         tempCtx.beginPath();
-        tempCtx.moveTo(cx, cy - r * 0.72);
-        tempCtx.lineTo(cx, cy + r * 0.34);
+        tempCtx.moveTo(cx, cy - r * 0.68);
+        tempCtx.lineTo(cx, cy + r * 0.5);
         tempCtx.stroke();
 
-        // 4. Detailed Brain Stem
+        // 4. Left Hemisphere Gyri — three nested folds that never cross each other,
+        // so the interior reads as clean brain folds instead of tangled foliage
         tempCtx.beginPath();
-        tempCtx.moveTo(cx - r * 0.08, cy + r * 0.34);
-        tempCtx.bezierCurveTo(cx - r * 0.08, cy + r * 0.54, cx - r * 0.18, cy + r * 0.64, cx - r * 0.12, cy + r * 0.74);
-        tempCtx.lineTo(cx + r * 0.12, cy + r * 0.74);
-        tempCtx.bezierCurveTo(cx + r * 0.18, cy + r * 0.64, cx + r * 0.08, cy + r * 0.54, cx + r * 0.08, cy + r * 0.34);
+        tempCtx.moveTo(cx - r * 0.15, cy - r * 0.45);
+        tempCtx.bezierCurveTo(cx - r * 0.55, cy - r * 0.66, cx - r * 0.72, cy - r * 0.3, cx - r * 0.55, cy - r * 0.1);
+        tempCtx.moveTo(cx - r * 0.18, cy - r * 0.15);
+        tempCtx.bezierCurveTo(cx - r * 0.52, cy - r * 0.22, cx - r * 0.6, cy + r * 0.1, cx - r * 0.4, cy + r * 0.22);
+        tempCtx.moveTo(cx - r * 0.12, cy + r * 0.12);
+        tempCtx.bezierCurveTo(cx - r * 0.3, cy + r * 0.08, cx - r * 0.38, cy + r * 0.32, cx - r * 0.2, cy + r * 0.42);
         tempCtx.stroke();
 
-        // 5. Left Hemisphere Winding Gyri Creases (Detailed neurological folds)
+        // 5. Right Hemisphere Gyri (exact mirror of the left folds)
         tempCtx.beginPath();
-        tempCtx.moveTo(cx - r * 0.15, cy - r * 0.48);
-        tempCtx.bezierCurveTo(cx - r * 0.45, cy - r * 0.68, cx - r * 0.68, cy - r * 0.28, cx - r * 0.38, cy - r * 0.14);
-        tempCtx.moveTo(cx - r * 0.25, cy - r * 0.14);
-        tempCtx.bezierCurveTo(cx - r * 0.68, cy - r * 0.14, cx - r * 0.78, cy + r * 0.24, cx - r * 0.38, cy + r * 0.34);
-        tempCtx.moveTo(cx - r * 0.15, cy + r * 0.24);
-        tempCtx.bezierCurveTo(cx - r * 0.35, cy + r * 0.14, cx - r * 0.45, cy + r * 0.34, cx - r * 0.24, cy + r * 0.44);
-        // Added 4th frontal branch for higher complexity
-        tempCtx.moveTo(cx - r * 0.1, cy - r * 0.2);
-        tempCtx.bezierCurveTo(cx - r * 0.3, cy - r * 0.4, cx - r * 0.5, cy - r * 0.1, cx - r * 0.2, cy);
+        tempCtx.moveTo(cx + r * 0.15, cy - r * 0.45);
+        tempCtx.bezierCurveTo(cx + r * 0.55, cy - r * 0.66, cx + r * 0.72, cy - r * 0.3, cx + r * 0.55, cy - r * 0.1);
+        tempCtx.moveTo(cx + r * 0.18, cy - r * 0.15);
+        tempCtx.bezierCurveTo(cx + r * 0.52, cy - r * 0.22, cx + r * 0.6, cy + r * 0.1, cx + r * 0.4, cy + r * 0.22);
+        tempCtx.moveTo(cx + r * 0.12, cy + r * 0.12);
+        tempCtx.bezierCurveTo(cx + r * 0.3, cy + r * 0.08, cx + r * 0.38, cy + r * 0.32, cx + r * 0.2, cy + r * 0.42);
         tempCtx.stroke();
 
-        // 6. Right Hemisphere Winding Gyri Creases (Mirrored detailed neurological folds)
-        tempCtx.beginPath();
-        tempCtx.moveTo(cx + r * 0.15, cy - r * 0.48);
-        tempCtx.bezierCurveTo(cx + r * 0.45, cy - r * 0.68, cx + r * 0.68, cy - r * 0.28, cx + r * 0.38, cy - r * 0.14);
-        tempCtx.moveTo(cx + r * 0.25, cy - r * 0.14);
-        tempCtx.bezierCurveTo(cx + r * 0.68, cy - r * 0.14, cx + r * 0.78, cy + r * 0.24, cx + r * 0.38, cy + r * 0.34);
-        tempCtx.moveTo(cx + r * 0.15, cy + r * 0.24);
-        tempCtx.bezierCurveTo(cx + r * 0.35, cy + r * 0.14, cx + r * 0.45, cy + r * 0.34, cx - r * 0.24, cy + r * 0.44);
-        // Added 4th frontal branch (mirrored)
-        tempCtx.moveTo(cx + r * 0.1, cy - r * 0.2);
-        tempCtx.bezierCurveTo(cx + r * 0.3, cy - r * 0.4, cx + r * 0.5, cy - r * 0.1, cx + r * 0.2, cy);
-        tempCtx.stroke();
-
-        // 7. Cerebellum Lobes (Horizontal rippled base lobes at the back bottom)
-        tempCtx.lineWidth = 4;
-        tempCtx.beginPath();
-        tempCtx.moveTo(cx - r * 0.38, cy + r * 0.42);
-        tempCtx.quadraticCurveTo(cx - r * 0.25, cy + r * 0.48, cx - r * 0.1, cy + r * 0.34);
-        tempCtx.moveTo(cx - r * 0.35, cy + r * 0.46);
-        tempCtx.quadraticCurveTo(cx - r * 0.22, cy + r * 0.52, cx - r * 0.1, cy + r * 0.38);
-        
-        tempCtx.moveTo(cx + r * 0.38, cy + r * 0.42);
-        tempCtx.quadraticCurveTo(cx + r * 0.25, cy + r * 0.48, cx + r * 0.1, cy + r * 0.34);
-        tempCtx.moveTo(cx + r * 0.35, cy + r * 0.46);
-        tempCtx.quadraticCurveTo(cx + r * 0.22, cy + r * 0.52, cx + r * 0.1, cy + r * 0.38);
-        tempCtx.stroke();
-
-        // 8. Firing Inner Synaptic Nodes (Drawn as filled dots inside the brain lobes to create beautiful dense glowing cores)
-        tempCtx.beginPath();
-        tempCtx.arc(cx - r * 0.42, cy - r * 0.32, 6, 0, Math.PI * 2);
-        tempCtx.arc(cx - r * 0.55, cy + r * 0.08, 6, 0, Math.PI * 2);
-        tempCtx.arc(cx - r * 0.34, cy + r * 0.26, 6, 0, Math.PI * 2);
-        tempCtx.arc(cx + r * 0.42, cy - r * 0.32, 6, 0, Math.PI * 2);
-        tempCtx.arc(cx + r * 0.55, cy + r * 0.08, 6, 0, Math.PI * 2);
-        tempCtx.arc(cx + r * 0.34, cy + r * 0.26, 6, 0, Math.PI * 2);
-        tempCtx.fill();
+        // (No inner synapse dots: filled dots next to the fold ends read as eyes/faces
+        // at particle resolution — the nested folds alone keep the icon unmistakably a brain)
 
       } else if (shapeIndex === 2) {
         // 📱 DETAILED BACK OF IPHONE WITH SCREEN BEZEL, DYNAMIC ISLAND, CAMERA BUMP, BUTTONS & APPLE LOGO
@@ -295,52 +259,39 @@ export function MorphicParticles() {
         tempCtx.fill();
         tempCtx.lineWidth = 10;
 
-        // 3. Nested Inner Screen Bezel Line (Makes it look incredibly premium and architectural!)
-        tempCtx.lineWidth = 4;
+        // 3. Premium Pro Camera Bump / Island (Top Left) — this is a clean BACK view of the
+        // phone, so no screen bezel or dynamic island (front elements mixed in read as clutter)
+        const bumpSize = w * 0.42;
+        const bx = cx - w / 2 + 12;
+        const by = cy - h / 2 + 12;
+        tempCtx.lineWidth = 6;
         tempCtx.beginPath();
-        tempCtx.roundRect(cx - w / 2 + 10, cy - h / 2 + 10, w - 20, h - 20, 14);
+        tempCtx.roundRect(bx, by, bumpSize, bumpSize, 14);
         tempCtx.stroke();
         tempCtx.lineWidth = 10;
-
-        // 4. Iconic Dynamic Island Pill at the top of the screen bezel
-        tempCtx.beginPath();
-        tempCtx.roundRect(cx - 24, cy - h / 2 + 18, 48, 10, 6);
-        tempCtx.fill();
-
-        // 5. Premium Pro Camera Bump / Island (Top Left)
-        const bumpSize = w * 0.38;
-        const bx = cx - w / 2 + 10;
-        const by = cy - h / 2 + 10;
-        tempCtx.beginPath();
-        tempCtx.roundRect(bx, by, bumpSize, bumpSize, 12);
-        tempCtx.stroke();
 
         // 6. Three Pro Camera Lenses inside Bump (with concentric double circles)
         const lensRadius = bumpSize * 0.16;
         const padding = bumpSize * 0.26;
         
+        // moveTo before each arc keeps the three lenses separate — chained arcs would
+        // fill the triangle between them and smear the whole camera bump into a blob
         tempCtx.beginPath();
         // Top-Left Lens
+        tempCtx.moveTo(bx + padding + lensRadius, by + padding);
         tempCtx.arc(bx + padding, by + padding, lensRadius, 0, Math.PI * 2);
         // Bottom-Left Lens
+        tempCtx.moveTo(bx + padding + lensRadius, by + bumpSize - padding);
         tempCtx.arc(bx + padding, by + bumpSize - padding, lensRadius, 0, Math.PI * 2);
         // Mid-Right Lens
+        tempCtx.moveTo(bx + bumpSize - padding + lensRadius, by + bumpSize / 2);
         tempCtx.arc(bx + bumpSize - padding, by + bumpSize / 2, lensRadius, 0, Math.PI * 2);
         tempCtx.fill();
 
-        // Concentric inner lens ring
-        tempCtx.lineWidth = 2;
+        // Flash dot in the top-right corner of the bump
         tempCtx.beginPath();
-        tempCtx.arc(bx + padding, by + padding, lensRadius * 0.5, 0, Math.PI * 2);
-        tempCtx.arc(bx + padding, by + bumpSize - padding, lensRadius * 0.5, 0, Math.PI * 2);
-        tempCtx.arc(bx + bumpSize - padding, by + bumpSize / 2, lensRadius * 0.5, 0, Math.PI * 2);
-        tempCtx.stroke();
-        tempCtx.lineWidth = 10;
-
-        // Small LiDAR/Flash accessories inside bump
-        tempCtx.beginPath();
-        tempCtx.arc(bx + bumpSize - padding, by + padding, 2.5, 0, Math.PI * 2);
-        tempCtx.arc(bx + padding * 1.5, by + bumpSize / 2, 1.5, 0, Math.PI * 2);
+        tempCtx.moveTo(bx + bumpSize - padding + 3, by + padding);
+        tempCtx.arc(bx + bumpSize - padding, by + padding, 3, 0, Math.PI * 2);
         tempCtx.fill();
 
         // 7. USB-C Charging Port Line at Bottom
@@ -351,7 +302,7 @@ export function MorphicParticles() {
         // 8. Iconic Apple Logo positioned proudly in the exact center of the Phone Chassis
         const ax = cx;
         const ay = cy;
-        const as = scale * 0.088; // Apple scale size
+        const as = scale * 0.1; // Apple scale size — a touch larger so the logo reads clearly in particles
 
         // Apple Leaf
         tempCtx.beginPath();
@@ -416,7 +367,8 @@ export function MorphicParticles() {
         tempCtx.fill();
         tempCtx.lineWidth = 10;
 
-        // 3. Inner glowing EyeSight glass display (tracing the contoured visor shape perfectly)
+        // 3. Inner EyeSight glass display outline — stroked, NOT filled: a fill floods the whole
+        // visor with particles into one solid blob and hides the dual lenses completely
         const iw = w * 0.90;
         const ih = h * 0.82;
         tempCtx.beginPath();
@@ -437,13 +389,19 @@ export function MorphicParticles() {
         tempCtx.lineTo(cx - iw / 2, cy - ih / 2 + 20);
         tempCtx.quadraticCurveTo(cx - iw / 2, cy - ih / 2, cx - iw / 2 + 20, cy - ih / 2);
         tempCtx.closePath();
-        tempCtx.fill();
-
-        // 4. Dual Ocular Optical Lenses (representing the inner displays of the Vision Pro)
         tempCtx.lineWidth = 4;
+        tempCtx.stroke();
+        tempCtx.lineWidth = 10;
+
+        // 4. Dual Ocular Optical Lenses — bolder rings, with moveTo between the two arcs
+        // (chained arcs otherwise draw a stray connector line between the lenses)
+        const lensR = h * 0.19;
+        tempCtx.lineWidth = 6;
         tempCtx.beginPath();
-        tempCtx.arc(cx - iw * 0.22, cy, h * 0.18, 0, Math.PI * 2);
-        tempCtx.arc(cx + iw * 0.22, cy, h * 0.18, 0, Math.PI * 2);
+        tempCtx.moveTo(cx - iw * 0.22 + lensR, cy);
+        tempCtx.arc(cx - iw * 0.22, cy, lensR, 0, Math.PI * 2);
+        tempCtx.moveTo(cx + iw * 0.22 + lensR, cy);
+        tempCtx.arc(cx + iw * 0.22, cy, lensR, 0, Math.PI * 2);
         tempCtx.stroke();
         tempCtx.lineWidth = 10;
 
@@ -454,7 +412,7 @@ export function MorphicParticles() {
         tempCtx.fill();
 
         // 6. Symmetrical Woven Solo Knit Band ribbing (Triple parallel headband lines)
-        tempCtx.lineWidth = 4;
+        tempCtx.lineWidth = 6;
         tempCtx.beginPath();
         // Left horizontal straps
         tempCtx.moveTo(cx - w / 2 - 8, cy - h * 0.18);
@@ -499,100 +457,81 @@ export function MorphicParticles() {
         tempCtx.closePath();
         tempCtx.stroke();
 
-        // 2. Physical Ergonomic Grip panels (Lines outlining the rubberized texturing on the handles)
-        tempCtx.lineWidth = 4;
-        tempCtx.beginPath();
-        // Left grip contour
-        tempCtx.moveTo(cx - w * 0.32, cy + h * 0.42);
-        tempCtx.bezierCurveTo(cx - w * 0.42, cy + h * 0.38, cx - w * 0.44, cy + h * 0.1, cx - w * 0.36, cy - h * 0.1);
-        // Right grip contour
-        tempCtx.moveTo(cx + w * 0.32, cy + h * 0.42);
-        tempCtx.bezierCurveTo(cx + w * 0.42, cy + h * 0.38, cx + w * 0.44, cy + h * 0.1, cx + w * 0.36, cy - h * 0.1);
-        tempCtx.stroke();
-        tempCtx.lineWidth = 10;
+        // (Grip-texture contours and the second bumper line were removed on purpose — at
+        // particle resolution those extra strokes inside the body just read as noise)
 
-        // 3. Continuous Top Trigger/Bumper partitions
-        tempCtx.lineWidth = 4;
-        tempCtx.beginPath();
-        tempCtx.moveTo(cx - w * 0.38, cy - h / 2 + 15);
-        tempCtx.quadraticCurveTo(cx, cy - h / 2 + 12, cx + w * 0.38, cy - h / 2 + 15);
-        tempCtx.stroke();
-        tempCtx.lineWidth = 10;
-
-        // 4. Iconic Asymmetric Joysticks (Thumbsticks with outer concentric wells)
+        // 2. Iconic Asymmetric Joysticks
         const stickRadius = w * 0.085;
         
+        // Thumbstick rings use a 6px stroke and a small 0.4r core dot — the previous 10px
+        // stroke + 0.65r fill merged into one solid blob with no visible ring at all
         // Left Joystick (High-Left)
         const lx = cx - w * 0.22;
         const ly = cy - h * 0.14;
-        // Outer concentric well
-        tempCtx.lineWidth = 2;
-        tempCtx.beginPath();
-        tempCtx.arc(lx, ly, stickRadius * 1.3, 0, Math.PI * 2);
-        tempCtx.stroke();
-        tempCtx.lineWidth = 10;
-        // Core Stick
+        tempCtx.lineWidth = 6;
         tempCtx.beginPath();
         tempCtx.arc(lx, ly, stickRadius, 0, Math.PI * 2);
         tempCtx.stroke();
         tempCtx.beginPath();
-        tempCtx.arc(lx, ly, stickRadius * 0.65, 0, Math.PI * 2);
+        tempCtx.arc(lx, ly, stickRadius * 0.4, 0, Math.PI * 2);
         tempCtx.fill();
 
         // Right Joystick (Low-Right)
         const rx = cx + w * 0.16;
         const ry = cy + h * 0.12;
-        // Outer concentric well
-        tempCtx.lineWidth = 2;
-        tempCtx.beginPath();
-        tempCtx.arc(rx, ry, stickRadius * 1.3, 0, Math.PI * 2);
-        tempCtx.stroke();
-        tempCtx.lineWidth = 10;
-        // Core Stick
         tempCtx.beginPath();
         tempCtx.arc(rx, ry, stickRadius, 0, Math.PI * 2);
         tempCtx.stroke();
         tempCtx.beginPath();
-        tempCtx.arc(rx, ry, stickRadius * 0.65, 0, Math.PI * 2);
+        tempCtx.arc(rx, ry, stickRadius * 0.4, 0, Math.PI * 2);
         tempCtx.fill();
+        tempCtx.lineWidth = 10;
 
         // 5. Detailed Circular D-Pad Well & D-Pad Cross (Left-Center Low)
         const dx = cx - w * 0.08;
         const dy = cy + h * 0.12;
         
-        // Outer Well Circle
+        // Outer Well Circle (6px stroke so the well ring and the cross inside stay distinct)
+        tempCtx.lineWidth = 6;
         tempCtx.beginPath();
         tempCtx.arc(dx, dy, w * 0.09, 0, Math.PI * 2);
         tempCtx.stroke();
+        tempCtx.lineWidth = 10;
 
-        // Inside D-pad Cross
-        const dSize = 10;
+        // Inside D-pad Cross (slightly larger so the cross reads clearly inside its well)
+        const dSize = 12;
         tempCtx.beginPath();
         tempCtx.rect(dx - dSize / 2, dy - dSize * 1.5, dSize, dSize * 3); // Vertical cross
         tempCtx.rect(dx - dSize * 1.5, dy - dSize / 2, dSize * 3, dSize); // Horizontal cross
         tempCtx.fill();
 
-        // 6. High-Right ABXY Action Buttons (Right side)
+        // 6. High-Right ABXY Action Buttons — moveTo before each arc so the four dots stay
+        // separate circles (chained arcs would fill the diamond between them into a blob)
         const bx = cx + w * 0.25;
         const by = cy - h * 0.14;
-        const bRadius = 5;
+        const bRadius = 7;
         tempCtx.beginPath();
-        tempCtx.arc(bx, by - 12, bRadius, 0, Math.PI * 2); // Top button (Y)
-        tempCtx.arc(bx + 12, by, bRadius, 0, Math.PI * 2); // Right button (B)
-        tempCtx.arc(bx, by + 12, bRadius, 0, Math.PI * 2); // Bottom button (A)
-        tempCtx.arc(bx - 12, by, bRadius, 0, Math.PI * 2); // Left button (X)
+        tempCtx.moveTo(bx + bRadius, by - 15);
+        tempCtx.arc(bx, by - 15, bRadius, 0, Math.PI * 2); // Top button (Y)
+        tempCtx.moveTo(bx + 15 + bRadius, by);
+        tempCtx.arc(bx + 15, by, bRadius, 0, Math.PI * 2); // Right button (B)
+        tempCtx.moveTo(bx + bRadius, by + 15);
+        tempCtx.arc(bx, by + 15, bRadius, 0, Math.PI * 2); // Bottom button (A)
+        tempCtx.moveTo(bx - 15 + bRadius, by);
+        tempCtx.arc(bx - 15, by, bRadius, 0, Math.PI * 2); // Left button (X)
         tempCtx.fill();
 
         // 7. Large Circular Xbox Logo Button (Top Center)
         const ox = cx;
         const oy = cy - h * 0.24;
         const oRadius = w * 0.06;
+        tempCtx.lineWidth = 6;
         tempCtx.beginPath();
         tempCtx.arc(ox, oy, oRadius, 0, Math.PI * 2);
         tempCtx.stroke();
 
         // Curved 'X' Brand lines inside Xbox button
-        tempCtx.lineWidth = 3;
+        tempCtx.lineWidth = 4;
         tempCtx.beginPath();
         // Left-to-Right curve
         tempCtx.moveTo(ox - oRadius * 0.5, oy - oRadius * 0.5);
@@ -603,14 +542,12 @@ export function MorphicParticles() {
         tempCtx.stroke();
         tempCtx.lineWidth = 10; // reset
 
-        // 8. Small Central Utility Buttons (View, Menu, Share)
-        // View Button (Left rectangular pad)
+        // 8. Small View & Menu Buttons flanking the Xbox logo — moved up beside the logo so they
+        // no longer collide with the right thumbstick well and D-pad well (which read as clutter)
         tempCtx.beginPath();
-        tempCtx.roundRect(cx - 24, cy - 8, 8, 6, 1.5);
-        // Menu Button (Right circular pad)
-        tempCtx.arc(cx + 24, cy - 5, 4, 0, Math.PI * 2);
-        // Share Button (Centered lower rounded block)
-        tempCtx.roundRect(cx - 4, cy + 12, 8, 6, 2);
+        tempCtx.roundRect(cx - 30, oy - 3, 8, 6, 1.5);
+        tempCtx.moveTo(cx + 30, oy); // detach the circle from the roundRect subpath
+        tempCtx.arc(cx + 26, oy, 4, 0, Math.PI * 2);
         tempCtx.fill();
       }
 
@@ -618,11 +555,12 @@ export function MorphicParticles() {
       const data = imgData.data;
       const rawPoints: { x: number; y: number }[] = [];
 
-      // Sample coordinates that have been filled/stroked with white
-      for (let y = 0; y < height; y += 4) {
-        for (let x = 0; x < width; x += 4) {
+      // Sample coordinates that have been filled/stroked with white.
+      // Fine 2px grid + higher alpha threshold rejects fuzzy anti-aliased edge pixels for sharp outlines.
+      for (let y = 0; y < height; y += 2) {
+        for (let x = 0; x < width; x += 2) {
           const index = (y * width + x) * 4;
-          if (data[index + 3] > 80) {
+          if (data[index + 3] > 150) {
             rawPoints.push({ x, y });
           }
         }
@@ -631,12 +569,20 @@ export function MorphicParticles() {
       // Distribute particles evenly over the sampled coordinates
       const finalPoints: { x: number; y: number }[] = [];
       if (rawPoints.length > 0) {
+        // Fisher-Yates shuffle, then cycle through every sampled pixel in order:
+        // every pixel of the icon gets equal particle coverage — no random clumps, no bald gaps.
+        for (let i = rawPoints.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = rawPoints[i];
+          rawPoints[i] = rawPoints[j];
+          rawPoints[j] = tmp;
+        }
         for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const p = rawPoints[Math.floor(Math.random() * rawPoints.length)];
-          // Add organic scatter/jitter around the precise lines for a constellation halo look
+          const p = rawPoints[i % rawPoints.length];
+          // Tiny jitter just breaks up the sampling grid without softening the lines
           finalPoints.push({
-            x: p.x + (Math.random() - 0.5) * 6,
-            y: p.y + (Math.random() - 0.5) * 6,
+            x: p.x + (Math.random() - 0.5) * 2,
+            y: p.y + (Math.random() - 0.5) * 2,
           });
         }
       }
