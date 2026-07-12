@@ -156,6 +156,7 @@ export default function App() {
     <>
       <Preloader onDone={() => setIsLoaded(true)} />
       <a className="visually-hidden" href="#web-apps">Skip to work</a>
+
       <main ref={snapRef} className={`snap${!isLoaded ? " is-preloading" : ""}`}>
         <Intro active={isLoaded && active === 0} />
         <ProjectSection kind="web" active={active === 1} />

@@ -9,15 +9,19 @@ interface Particle {
   vy: number;
   size: number;
   mass: number; // Unique particle mass/inertia for staggered, natural arrival pacing
+  magneticFactor: number; // Deflection factor (-2.5 to 2.5) mapping particles to different magnetic field arcs
   baseOpacity: number;
   opacity: number;
   targetX: number | null;
   targetY: number | null;
+  nextTargetX: number | null;  // Pending target coordinates for progressive transitions
+  nextTargetY: number | null;  // Pending target coordinates for progressive transitions
+  transitionDelay: number;     // Dynamic staggered delay based on spatial position
   phase: number;
   speed: number;
 }
 
-// 6750 particles for an ultra-dense, hyper-vibrant cybernetic neural ocean.
+// Ultra-dense, hyper-vibrant cybernetic neural ocean with 6750 particles.
 const PARTICLE_COUNT = 6750; 
 
 export function MorphicParticles() {
@@ -40,19 +44,41 @@ export function MorphicParticles() {
     // Always start with Shape 1 (Brain) on load
     let currentShapeIndex = 1; 
 
-    // Track mouse coordinates for tactile interaction
+    // Track transition start times for progressive spatial wave sweep
+    let transitionStartTime = Date.now();
+
+    // Track mouse coordinates & velocity for highly kinetic interactions
     const mouse = { x: -1000, y: -1000, active: false };
+    let mouseVx = 0;
+    let mouseVy = 0;
+    let lastMouseX = -1000;
+    let lastMouseY = -1000;
 
     const handlePointerMove = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
+      const newMouseX = e.clientX - rect.left;
+      const newMouseY = e.clientY - rect.top;
+      
+      // Calculate cursor velocity to transfer actual kinetic throw force to particles
+      if (lastMouseX !== -1000 && lastMouseY !== -1000) {
+        mouseVx = newMouseX - lastMouseX;
+        mouseVy = newMouseY - lastMouseY;
+      }
+      
+      mouse.x = newMouseX;
+      mouse.y = newMouseY;
+      lastMouseX = newMouseX;
+      lastMouseY = newMouseY;
       mouse.active = true;
     };
 
     const handlePointerLeave = () => {
       mouse.x = -1000;
       mouse.y = -1000;
+      lastMouseX = -1000;
+      lastMouseY = -1000;
+      mouseVx = 0;
+      mouseVy = 0;
       mouse.active = false;
     };
 
@@ -100,10 +126,15 @@ export function MorphicParticles() {
           size: Math.random() < 0.06 ? Math.random() * 2.0 + 1.2 : Math.random() * 0.8 + 0.4,
           // Mass variation (between 0.6 and 1.8) makes some particles heavy/sluggish and others light/zippy
           mass: 0.6 + Math.random() * 1.2,
+          // Magnetic deflection factor (-2.5 to 2.5) mapping particles to different curved field lines
+          magneticFactor: (Math.random() - 0.5) * 5.0,
           baseOpacity: 0.35 + Math.random() * 0.65,
           opacity: 0.5,
           targetX: null,
           targetY: null,
+          nextTargetX: null,
+          nextTargetY: null,
+          transitionDelay: 0,
           phase: Math.random() * Math.PI * 2,
           speed: 0.012 + Math.random() * 0.016, // slightly faster twinkle rates for higher energy shimmer
         });
@@ -115,6 +146,8 @@ export function MorphicParticles() {
         for (let i = 0; i < particles.length; i++) {
           particles[i].targetX = targets[i]?.x ?? null;
           particles[i].targetY = targets[i]?.y ?? null;
+          particles[i].nextTargetX = null;
+          particles[i].nextTargetY = null;
         }
       }
     };
@@ -159,7 +192,7 @@ export function MorphicParticles() {
       tempCtx.lineJoin = "round";
 
       if (shapeIndex === 1) {
-        // 🧠 HYPER-DETAILED CEREBRAL BRAIN (AI) - Wavy gyri, central fissure, cerebellum, and detailed spinal stem
+        // 🧠 HYPER-DETAILED CEREBRAL BRAIN (AI) - Wavy gyri, central fissure, cerebellum, spinal stem & synapse junctions
         const r = scale * 0.48;
 
         // 1. Left Cerebral Hemisphere Outer Outline (Corrugated, wavy lobes)
@@ -211,7 +244,7 @@ export function MorphicParticles() {
         tempCtx.moveTo(cx + r * 0.25, cy - r * 0.14);
         tempCtx.bezierCurveTo(cx + r * 0.68, cy - r * 0.14, cx + r * 0.78, cy + r * 0.24, cx + r * 0.38, cy + r * 0.34);
         tempCtx.moveTo(cx + r * 0.15, cy + r * 0.24);
-        tempCtx.bezierCurveTo(cx + r * 0.35, cy + r * 0.14, cx + r * 0.45, cy + r * 0.34, cx + r * 0.24, cy + r * 0.44);
+        tempCtx.bezierCurveTo(cx + r * 0.35, cy + r * 0.14, cx + r * 0.45, cy + r * 0.34, cx - r * 0.24, cy + r * 0.44);
         // Added 4th frontal branch (mirrored)
         tempCtx.moveTo(cx + r * 0.1, cy - r * 0.2);
         tempCtx.bezierCurveTo(cx + r * 0.3, cy - r * 0.4, cx + r * 0.5, cy - r * 0.1, cx + r * 0.2, cy);
@@ -231,8 +264,18 @@ export function MorphicParticles() {
         tempCtx.quadraticCurveTo(cx + r * 0.22, cy + r * 0.52, cx + r * 0.1, cy + r * 0.38);
         tempCtx.stroke();
 
+        // 8. Firing Inner Synaptic Nodes (Drawn as filled dots inside the brain lobes to create beautiful dense glowing cores)
+        tempCtx.beginPath();
+        tempCtx.arc(cx - r * 0.42, cy - r * 0.32, 6, 0, Math.PI * 2);
+        tempCtx.arc(cx - r * 0.55, cy + r * 0.08, 6, 0, Math.PI * 2);
+        tempCtx.arc(cx - r * 0.34, cy + r * 0.26, 6, 0, Math.PI * 2);
+        tempCtx.arc(cx + r * 0.42, cy - r * 0.32, 6, 0, Math.PI * 2);
+        tempCtx.arc(cx + r * 0.55, cy + r * 0.08, 6, 0, Math.PI * 2);
+        tempCtx.arc(cx + r * 0.34, cy + r * 0.26, 6, 0, Math.PI * 2);
+        tempCtx.fill();
+
       } else if (shapeIndex === 2) {
-        // 📱 DETAILED BACK OF IPHONE WITH PRO CAMERA BUMP, BUTTONS & APPLE LOGO
+        // 📱 DETAILED BACK OF IPHONE WITH SCREEN BEZEL, DYNAMIC ISLAND, CAMERA BUMP, BUTTONS & APPLE LOGO
         const w = scale * 0.46;
         const h = scale * 0.82;
         
@@ -252,7 +295,19 @@ export function MorphicParticles() {
         tempCtx.fill();
         tempCtx.lineWidth = 10;
 
-        // 3. Premium Pro Camera Bump / Island (Top Left)
+        // 3. Nested Inner Screen Bezel Line (Makes it look incredibly premium and architectural!)
+        tempCtx.lineWidth = 4;
+        tempCtx.beginPath();
+        tempCtx.roundRect(cx - w / 2 + 10, cy - h / 2 + 10, w - 20, h - 20, 14);
+        tempCtx.stroke();
+        tempCtx.lineWidth = 10;
+
+        // 4. Iconic Dynamic Island Pill at the top of the screen bezel
+        tempCtx.beginPath();
+        tempCtx.roundRect(cx - 24, cy - h / 2 + 18, 48, 10, 6);
+        tempCtx.fill();
+
+        // 5. Premium Pro Camera Bump / Island (Top Left)
         const bumpSize = w * 0.38;
         const bx = cx - w / 2 + 10;
         const by = cy - h / 2 + 10;
@@ -260,7 +315,7 @@ export function MorphicParticles() {
         tempCtx.roundRect(bx, by, bumpSize, bumpSize, 12);
         tempCtx.stroke();
 
-        // 4. Three Pro Camera Lenses inside Bump
+        // 6. Three Pro Camera Lenses inside Bump (with concentric double circles)
         const lensRadius = bumpSize * 0.16;
         const padding = bumpSize * 0.26;
         
@@ -273,18 +328,27 @@ export function MorphicParticles() {
         tempCtx.arc(bx + bumpSize - padding, by + bumpSize / 2, lensRadius, 0, Math.PI * 2);
         tempCtx.fill();
 
+        // Concentric inner lens ring
+        tempCtx.lineWidth = 2;
+        tempCtx.beginPath();
+        tempCtx.arc(bx + padding, by + padding, lensRadius * 0.5, 0, Math.PI * 2);
+        tempCtx.arc(bx + padding, by + bumpSize - padding, lensRadius * 0.5, 0, Math.PI * 2);
+        tempCtx.arc(bx + bumpSize - padding, by + bumpSize / 2, lensRadius * 0.5, 0, Math.PI * 2);
+        tempCtx.stroke();
+        tempCtx.lineWidth = 10;
+
         // Small LiDAR/Flash accessories inside bump
         tempCtx.beginPath();
         tempCtx.arc(bx + bumpSize - padding, by + padding, 2.5, 0, Math.PI * 2);
         tempCtx.arc(bx + padding * 1.5, by + bumpSize / 2, 1.5, 0, Math.PI * 2);
         tempCtx.fill();
 
-        // 5. USB-C Charging Port Line at Bottom
+        // 7. USB-C Charging Port Line at Bottom
         tempCtx.beginPath();
         tempCtx.roundRect(cx - 16, cy + h / 2 - 6, 32, 4, 2);
         tempCtx.fill();
 
-        // 6. Iconic Apple Logo positioned proudly in the exact center of the Phone Chassis
+        // 8. Iconic Apple Logo positioned proudly in the exact center of the Phone Chassis
         const ax = cx;
         const ay = cy;
         const as = scale * 0.088; // Apple scale size
@@ -308,31 +372,37 @@ export function MorphicParticles() {
         tempCtx.fill();
 
       } else if (shapeIndex === 3) {
-        // 🥽 APPLE VISION PRO SPATIAL VISOR & HEADBAND (XR / Spatial Computing) - Highly contoured, smooth, and defined
-        const w = scale * 0.86;
-        const h = scale * 0.38;
+        // 🥽 APPLE VISION PRO SPATIAL VISOR, DUAL OPTICS, VENTILATION & HEADBAND (XR) - Symmetrical, stable, and highly defined
+        const w = scale * 0.84;
+        const h = scale * 0.42;
 
-        // 1. Perfectly contoured Vision Pro front visor (utilizing arcTo for pristine rounded corners & custom bottom nose dip)
+        // 1. Perfectly contoured Vision Pro front visor (utilizing stable quadraticCurveTo for rounded corners & bottom nose bridge dip)
         tempCtx.beginPath();
         // Start top-left
-        tempCtx.moveTo(cx - w * 0.4, cy - h * 0.35);
+        tempCtx.moveTo(cx - w / 2 + 25, cy - h / 2);
         // Top edge
-        tempCtx.lineTo(cx + w * 0.4, cy - h * 0.35);
-        // Top-right corner
-        tempCtx.arcTo(cx + w * 0.48, cy - h * 0.35, cx + w * 0.48, cy, 20);
-        // Right vertical edge and bottom-right corner
-        tempCtx.arcTo(cx + w * 0.48, cy + h * 0.35, cx + w * 0.25, cy + h * 0.35, 20);
-        // Bottom right-of-center
-        tempCtx.lineTo(cx + w * 0.16, cy + h * 0.35);
-        // Nose bridge cutout curve (smooth upward wavy notch)
-        tempCtx.bezierCurveTo(cx + w * 0.12, cy + h * 0.35, cx + w * 0.08, cy + h * 0.08, cx, cy + h * 0.08);
-        tempCtx.bezierCurveTo(cx - w * 0.08, cy + h * 0.08, cx - w * 0.12, cy + h * 0.35, cx - w * 0.16, cy + h * 0.35);
-        // Bottom left-of-center
-        tempCtx.lineTo(cx - w * 0.25, cy + h * 0.35);
-        // Bottom-left corner and left vertical edge
-        tempCtx.arcTo(cx - w * 0.48, cy + h * 0.35, cx - w * 0.48, cy, 20);
-        // Top-left corner
-        tempCtx.arcTo(cx - w * 0.48, cy - h * 0.35, cx - w * 0.4, cy - h * 0.35, 20);
+        tempCtx.lineTo(cx + w / 2 - 25, cy - h / 2);
+        // Top-right rounded corner
+        tempCtx.quadraticCurveTo(cx + w / 2, cy - h / 2, cx + w / 2, cy - h / 2 + 25);
+        // Right vertical edge
+        tempCtx.lineTo(cx + w / 2, cy + h / 2 - 25);
+        // Bottom-right rounded corner
+        tempCtx.quadraticCurveTo(cx + w / 2, cy + h / 2, cx + w / 2 - 25, cy + h / 2);
+        // Bottom right edge
+        tempCtx.lineTo(cx + w * 0.16, cy + h / 2);
+        
+        // Nose bridge cutout (smooth upward swooping arc)
+        tempCtx.bezierCurveTo(cx + w * 0.12, cy + h / 2, cx + w * 0.08, cy + h * 0.14, cx, cy + h * 0.14);
+        tempCtx.bezierCurveTo(cx - w * 0.08, cy + h * 0.14, cx - w * 0.12, cy + h / 2, cx - w * 0.16, cy + h / 2);
+        
+        // Bottom left edge
+        tempCtx.lineTo(cx - w / 2 + 25, cy + h / 2);
+        // Bottom-left rounded corner
+        tempCtx.quadraticCurveTo(cx - w / 2, cy + h / 2, cx - w / 2, cy + h / 2 - 25);
+        // Left vertical edge
+        tempCtx.lineTo(cx - w / 2, cy - h / 2 + 25);
+        // Top-left rounded corner
+        tempCtx.quadraticCurveTo(cx - w / 2, cy - h / 2, cx - w / 2 + 25, cy - h / 2);
         tempCtx.closePath();
         tempCtx.stroke();
 
@@ -340,55 +410,73 @@ export function MorphicParticles() {
         tempCtx.lineWidth = 4;
         tempCtx.beginPath();
         // Right Digital Crown knob
-        tempCtx.roundRect(cx + w * 0.24, cy - h * 0.35 - 5, 12, 5, 1.5);
+        tempCtx.roundRect(cx + w * 0.24, cy - h / 2 - 6, 12, 6, 1.5);
         // Left Action Button
-        tempCtx.roundRect(cx - w * 0.24, cy - h * 0.35 - 3, 16, 3, 1);
+        tempCtx.roundRect(cx - w * 0.24, cy - h / 2 - 4, 16, 4, 1);
         tempCtx.fill();
         tempCtx.lineWidth = 10;
 
-        // 3. Inner glowing EyeSight glass display (tracing the smooth contoured visor perfectly)
-        const iw = w * 0.9;
+        // 3. Inner glowing EyeSight glass display (tracing the contoured visor shape perfectly)
+        const iw = w * 0.90;
         const ih = h * 0.82;
         tempCtx.beginPath();
-        tempCtx.moveTo(cx - iw * 0.4, cy - ih * 0.35);
-        tempCtx.lineTo(cx + iw * 0.4, cy - ih * 0.35);
-        tempCtx.arcTo(cx + iw * 0.48, cy - ih * 0.35, cx + iw * 0.48, cy, 16);
-        tempCtx.arcTo(cx + iw * 0.48, cy + ih * 0.35, cx + iw * 0.25, cy + ih * 0.35, 16);
-        tempCtx.lineTo(cx + iw * 0.16, cy + ih * 0.35);
-        tempCtx.bezierCurveTo(cx + iw * 0.12, cy + ih * 0.35, cx + iw * 0.08, cy + ih * 0.08, cx, cy + ih * 0.08);
-        tempCtx.bezierCurveTo(cx - iw * 0.08, cy + ih * 0.08, cx - iw * 0.12, cy + ih * 0.35, cx - iw * 0.16, cy + ih * 0.35);
-        tempCtx.lineTo(cx - iw * 0.25, cy + ih * 0.35);
-        tempCtx.arcTo(cx - iw * 0.48, cy + ih * 0.35, cx - iw * 0.48, cy, 16);
-        tempCtx.arcTo(cx - iw * 0.48, cy - ih * 0.35, cx - iw * 0.4, cy - ih * 0.35, 16);
+        // Top-left
+        tempCtx.moveTo(cx - iw / 2 + 20, cy - ih / 2);
+        tempCtx.lineTo(cx + iw / 2 - 20, cy - ih / 2);
+        tempCtx.quadraticCurveTo(cx + iw / 2, cy - ih / 2, cx + iw / 2, cy - ih / 2 + 20);
+        tempCtx.lineTo(cx + iw / 2, cy + ih / 2 - 20);
+        tempCtx.quadraticCurveTo(cx + iw / 2, cy + ih / 2, cx + iw / 2 - 20, cy + ih / 2);
+        tempCtx.lineTo(cx + iw * 0.16, cy + ih / 2);
+        
+        // Nose bridge cutout (matching inner screen)
+        tempCtx.bezierCurveTo(cx + iw * 0.12, cy + ih / 2, cx + iw * 0.08, cy + ih * 0.14, cx, cy + ih * 0.14);
+        tempCtx.bezierCurveTo(cx - iw * 0.08, cy + ih * 0.14, cx - iw * 0.12, cy + ih / 2, cx - iw * 0.16, cy + ih / 2);
+        
+        tempCtx.lineTo(cx - iw / 2 + 20, cy + ih / 2);
+        tempCtx.quadraticCurveTo(cx - iw / 2, cy + ih / 2, cx - iw / 2, cy + ih / 2 - 20);
+        tempCtx.lineTo(cx - iw / 2, cy - ih / 2 + 20);
+        tempCtx.quadraticCurveTo(cx - iw / 2, cy - ih / 2, cx - iw / 2 + 20, cy - ih / 2);
         tempCtx.closePath();
         tempCtx.fill();
 
-        // 4. Side Audio Pods/Stems (Sleek pods extending horizontally)
+        // 4. Dual Ocular Optical Lenses (representing the inner displays of the Vision Pro)
+        tempCtx.lineWidth = 4;
         tempCtx.beginPath();
-        tempCtx.roundRect(cx - w / 2 - 8, cy - 8, 10, 16, 3);
-        tempCtx.roundRect(cx + w / 2 - 2, cy - 8, 10, 16, 3);
+        tempCtx.arc(cx - iw * 0.22, cy, h * 0.18, 0, Math.PI * 2);
+        tempCtx.arc(cx + iw * 0.22, cy, h * 0.18, 0, Math.PI * 2);
+        tempCtx.stroke();
+        tempCtx.lineWidth = 10;
+
+        // 5. Side Audio Pods/Stems (Sleek pods extending horizontally)
+        tempCtx.beginPath();
+        tempCtx.roundRect(cx - w / 2 - 8, cy - 8, 8, 16, 3);
+        tempCtx.roundRect(cx + w / 2, cy - 8, 8, 16, 3);
         tempCtx.fill();
 
-        // 5. Ribbed Solo Knit Band (parallel headband lines extending horizontally to the left and right)
+        // 6. Symmetrical Woven Solo Knit Band ribbing (Triple parallel headband lines)
         tempCtx.lineWidth = 4;
         tempCtx.beginPath();
         // Left horizontal straps
-        tempCtx.moveTo(cx - w / 2, cy - h * 0.15);
-        tempCtx.lineTo(cx - w / 2 - 26, cy - h * 0.15);
-        tempCtx.moveTo(cx - w / 2, cy + h * 0.15);
-        tempCtx.lineTo(cx - w / 2 - 26, cy + h * 0.15);
+        tempCtx.moveTo(cx - w / 2 - 8, cy - h * 0.18);
+        tempCtx.lineTo(cx - w / 2 - 32, cy - h * 0.18);
+        tempCtx.moveTo(cx - w / 2 - 8, cy);
+        tempCtx.lineTo(cx - w / 2 - 32, cy);
+        tempCtx.moveTo(cx - w / 2 - 8, cy + h * 0.18);
+        tempCtx.lineTo(cx - w / 2 - 32, cy + h * 0.18);
         // Right horizontal straps
-        tempCtx.moveTo(cx + w / 2, cy - h * 0.15);
-        tempCtx.lineTo(cx + w / 2 + 26, cy - h * 0.15);
-        tempCtx.moveTo(cx + w / 2, cy + h * 0.15);
-        tempCtx.lineTo(cx + w / 2 + 26, cy + h * 0.15);
+        tempCtx.moveTo(cx + w / 2 + 8, cy - h * 0.18);
+        tempCtx.lineTo(cx + w / 2 + 32, cy - h * 0.18);
+        tempCtx.moveTo(cx + w / 2 + 8, cy);
+        tempCtx.lineTo(cx + w / 2 + 32, cy);
+        tempCtx.moveTo(cx + w / 2 + 8, cy + h * 0.18);
+        tempCtx.lineTo(cx + w / 2 + 32, cy + h * 0.18);
         tempCtx.stroke();
 
         // Re-set line-width for game controller
         tempCtx.lineWidth = 8;
 
       } else if (shapeIndex === 4) {
-        // 🎮 PREMIUM XBOX CONTROLLER (Games / Play) - Asymmetric thumbsticks, D-pad circular well, and Xbox central logo
+        // 🎮 PREMIUM XBOX CONTROLLER (Games / Play) - Asymmetric thumbsticks, grip lines, D-pad well, and central Xbox logo button
         const w = scale * 0.82;
         const h = scale * 0.54;
 
@@ -411,7 +499,19 @@ export function MorphicParticles() {
         tempCtx.closePath();
         tempCtx.stroke();
 
-        // 2. Continuous Top Trigger/Bumper partitions
+        // 2. Physical Ergonomic Grip panels (Lines outlining the rubberized texturing on the handles)
+        tempCtx.lineWidth = 4;
+        tempCtx.beginPath();
+        // Left grip contour
+        tempCtx.moveTo(cx - w * 0.32, cy + h * 0.42);
+        tempCtx.bezierCurveTo(cx - w * 0.42, cy + h * 0.38, cx - w * 0.44, cy + h * 0.1, cx - w * 0.36, cy - h * 0.1);
+        // Right grip contour
+        tempCtx.moveTo(cx + w * 0.32, cy + h * 0.42);
+        tempCtx.bezierCurveTo(cx + w * 0.42, cy + h * 0.38, cx + w * 0.44, cy + h * 0.1, cx + w * 0.36, cy - h * 0.1);
+        tempCtx.stroke();
+        tempCtx.lineWidth = 10;
+
+        // 3. Continuous Top Trigger/Bumper partitions
         tempCtx.lineWidth = 4;
         tempCtx.beginPath();
         tempCtx.moveTo(cx - w * 0.38, cy - h / 2 + 15);
@@ -419,12 +519,19 @@ export function MorphicParticles() {
         tempCtx.stroke();
         tempCtx.lineWidth = 10;
 
-        // 3. Iconic Asymmetric Joysticks (Thumbsticks)
+        // 4. Iconic Asymmetric Joysticks (Thumbsticks with outer concentric wells)
         const stickRadius = w * 0.085;
         
         // Left Joystick (High-Left)
         const lx = cx - w * 0.22;
         const ly = cy - h * 0.14;
+        // Outer concentric well
+        tempCtx.lineWidth = 2;
+        tempCtx.beginPath();
+        tempCtx.arc(lx, ly, stickRadius * 1.3, 0, Math.PI * 2);
+        tempCtx.stroke();
+        tempCtx.lineWidth = 10;
+        // Core Stick
         tempCtx.beginPath();
         tempCtx.arc(lx, ly, stickRadius, 0, Math.PI * 2);
         tempCtx.stroke();
@@ -435,6 +542,13 @@ export function MorphicParticles() {
         // Right Joystick (Low-Right)
         const rx = cx + w * 0.16;
         const ry = cy + h * 0.12;
+        // Outer concentric well
+        tempCtx.lineWidth = 2;
+        tempCtx.beginPath();
+        tempCtx.arc(rx, ry, stickRadius * 1.3, 0, Math.PI * 2);
+        tempCtx.stroke();
+        tempCtx.lineWidth = 10;
+        // Core Stick
         tempCtx.beginPath();
         tempCtx.arc(rx, ry, stickRadius, 0, Math.PI * 2);
         tempCtx.stroke();
@@ -442,7 +556,7 @@ export function MorphicParticles() {
         tempCtx.arc(rx, ry, stickRadius * 0.65, 0, Math.PI * 2);
         tempCtx.fill();
 
-        // 4. Detailed Circular D-Pad Well & D-Pad Cross (Left-Center Low)
+        // 5. Detailed Circular D-Pad Well & D-Pad Cross (Left-Center Low)
         const dx = cx - w * 0.08;
         const dy = cy + h * 0.12;
         
@@ -458,7 +572,7 @@ export function MorphicParticles() {
         tempCtx.rect(dx - dSize * 1.5, dy - dSize / 2, dSize * 3, dSize); // Horizontal cross
         tempCtx.fill();
 
-        // 5. High-Right ABXY Action Buttons (Right side)
+        // 6. High-Right ABXY Action Buttons (Right side)
         const bx = cx + w * 0.25;
         const by = cy - h * 0.14;
         const bRadius = 5;
@@ -469,7 +583,7 @@ export function MorphicParticles() {
         tempCtx.arc(bx - 12, by, bRadius, 0, Math.PI * 2); // Left button (X)
         tempCtx.fill();
 
-        // 6. Large Circular Xbox Logo Button (Top Center)
+        // 7. Large Circular Xbox Logo Button (Top Center)
         const ox = cx;
         const oy = cy - h * 0.24;
         const oRadius = w * 0.06;
@@ -489,7 +603,7 @@ export function MorphicParticles() {
         tempCtx.stroke();
         tempCtx.lineWidth = 10; // reset
 
-        // 7. Small Central Utility Buttons (View, Menu, Share)
+        // 8. Small Central Utility Buttons (View, Menu, Share)
         // View Button (Left rectangular pad)
         tempCtx.beginPath();
         tempCtx.roundRect(cx - 24, cy - 8, 8, 6, 1.5);
@@ -536,18 +650,32 @@ export function MorphicParticles() {
       currentShapeIndex = (currentShapeIndex % 4) + 1;
       const targets = getTargetPoints(currentShapeIndex);
       if (targets.length > 0) {
+        transitionStartTime = Date.now(); // Reset transition start timestamp
+        
         for (let i = 0; i < particles.length; i++) {
-          particles[i].targetX = targets[i]?.x ?? null;
-          particles[i].targetY = targets[i]?.y ?? null;
+          const p = particles[i];
+          p.nextTargetX = targets[i]?.x ?? null;
+          p.nextTargetY = targets[i]?.y ?? null;
+          
+          // Evaporate one-by-one: assign a completely individual, randomized delay over a 3.2s transition window.
+          // This guarantees that the points leave completely individually, one-by-one, with NO collective group wave.
+          p.transitionDelay = Math.random() * 3200;
         }
       }
     };
 
-    // Run direct shape morph cycle every 4.5 seconds (luxurious hold time, with continuous transition)
-    const morphInterval = window.setInterval(cycleNextShape, 4500);
+    // Run direct shape morph cycle every 10.0 seconds (10000ms) to give slow-motion particles ample time to form and hold shapes
+    const morphInterval = window.setInterval(cycleNextShape, 10000);
 
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
+
+      // Decay mouse velocity on each frame so momentum is only active during active pointer motion
+      mouseVx *= 0.88;
+      mouseVy *= 0.88;
+
+      // Track how much time has passed since the active morph sweep was triggered
+      const elapsed = Date.now() - transitionStartTime;
 
       // Loop and update particle positions
       for (let i = 0; i < particles.length; i++) {
@@ -560,6 +688,16 @@ export function MorphicParticles() {
         const twinkle = Math.pow(0.55 + Math.sin(p.phase) * 0.45, 3.5);
         p.opacity = p.baseOpacity * twinkle;
 
+        // Progressive Sweep Lock: when its individual spatial delay is met, swap its pending target to active target!
+        if (p.nextTargetX !== null && p.nextTargetY !== null && elapsed > p.transitionDelay) {
+          p.targetX = p.nextTargetX;
+          p.targetY = p.nextTargetY;
+          // Clear pending tags so we don't trigger the copy overhead again
+          p.nextTargetX = null;
+          p.nextTargetY = null;
+        }
+
+        // 1. Reset/Calculate base velocities and spring forces
         if (p.targetX !== null && p.targetY !== null) {
           // Morphing State: High-fidelity Gravitational Vortex Spiral Physics
           const dx = p.targetX - p.x;
@@ -567,30 +705,26 @@ export function MorphicParticles() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist > 1) {
-            // 1. Snappy Hooke's Law Attraction (modulated by individual particle mass for staggered, organic arrival)
-            // Proportional to distance (dx, dy) so particles fly lightning-fast when far away and slow down as they arrive
-            p.vx += dx * (0.045 / p.mass);
-            p.vy += dy * (0.045 / p.mass);
+            const nx = dx / dist;
+            const ny = dy / dist;
 
-            // 2. Swirling Vortex Spiral Force (curves their trajectories so they glide in naturally instead of straight lines)
-            // The spiral force is stronger when far away and tapers off as they arrive
-            const spiralStrength = Math.min(1.2, dist / 80) * 0.16;
-            p.vx += (-dy / dist) * spiralStrength;
-            p.vy += (dx / dist) * spiralStrength;
+            // 1. High-Velocity Spring Attraction (Doubled to 0.021 for rapid, crisp magnetic shape snapping)
+            p.vx += dx * (0.021 / p.mass);
+            p.vy += dy * (0.021 / p.mass);
+
+            // 2. Magnetic Field Line Deflection (Lorentz force simulation)
+            // Forces particles to glide along distinct curved magnetic flux arcs instead of identical lines
+            const magStrength = Math.min(2.5, dist / 60) * 0.16 * p.magneticFactor;
+            p.vx += -ny * magStrength;
+            p.vy += nx * magStrength;
+
+            // 3. Gentle Swirling Vortex Spiral Force
+            const spiralStrength = Math.min(1.0, dist / 120) * 0.02;
+            p.vx += -ny * spiralStrength;
+            p.vy += nx * spiralStrength;
           }
-
-          // 3. Fluid Damping (friction)
-          p.vx *= 0.82;
-          p.vy *= 0.82;
-
-          p.x += p.vx;
-          p.y += p.vy;
-          
-          // Subtle breathing vibration even when locked to keep the icon "alive"
-          p.x += Math.sin(p.phase) * 0.15;
-          p.y += Math.cos(p.phase) * 0.15;
         } else {
-          // Organically Drifting Starry Night State (locally restricted to designated corner safe-zones)
+          // Organically Drifting Starry Night State
           p.vx += (Math.random() - 0.5) * 0.025;
           p.vy += (Math.random() - 0.5) * 0.025;
 
@@ -599,26 +733,48 @@ export function MorphicParticles() {
           const dy = p.originY - p.y;
           p.vx += dx * 0.0008;
           p.vy += dy * 0.0008;
-
-          p.vx *= 0.96;
-          p.vy *= 0.96;
-
-          p.x += p.vx;
-          p.y += p.vy;
         }
 
-        // Tactile physics pointer repulsion
+        // 2. Mouse Kinetic Velocity Injection (calculated BEFORE position updates!)
         if (mouse.active) {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const forceRadius = 100;
+          const mx = p.x - mouse.x;
+          const my = p.y - mouse.y;
+          const dist = Math.sqrt(mx * mx + my * my);
+          const forceRadius = 100; // slightly wider interactive field for epic tactile feel
 
-          if (dist < forceRadius) {
-            const force = (forceRadius - dist) / forceRadius;
-            p.x -= (dx / dist) * force * 12;
-            p.y -= (dy / dist) * force * 12;
+          if (dist < forceRadius && dist > 1) {
+            const strength = (forceRadius - dist) / forceRadius;
+            const nx = mx / dist;
+            const ny = my / dist;
+
+            // Static Repulsion (makes them part away when cursor is still) 
+            // + Kinetic Momentum Transfer (throws them violently in the direction of fast mouse sweeps!)
+            const staticForce = strength * 6.5;
+            const kineticX = mouseVx * strength * 2.2;
+            const kineticY = mouseVy * strength * 2.2;
+
+            p.vx += (nx * staticForce + kineticX) / p.mass;
+            p.vy += (ny * staticForce + kineticY) / p.mass;
           }
+        }
+
+        // 3. Apply Viscosity / Fluid Damping (relaxed to 0.88 for gorgeous low-friction magnetic gliding!)
+        if (p.targetX !== null && p.targetY !== null) {
+          p.vx *= 0.88;
+          p.vy *= 0.88;
+        } else {
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+        }
+
+        // 4. Update Coordinates
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Subtle breathing vibration even when locked to keep the icon "alive"
+        if (p.targetX !== null && p.targetY !== null) {
+          p.x += Math.sin(p.phase) * 0.15;
+          p.y += Math.cos(p.phase) * 0.15;
         }
 
         // Draw particle node
