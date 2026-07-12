@@ -31,7 +31,8 @@ export function Cursor() {
         ry = y;
       }
       const target = (e.target as Element | null)?.closest?.("[data-cursor]");
-      setLabel(target?.getAttribute("data-cursor") ?? "");
+      const nextLabel = target?.getAttribute("data-cursor") ?? "";
+      setLabel((prev) => (prev !== nextLabel ? nextLabel : prev));
     };
     const onDown = () => setPressed(true);
     const onUp = () => setPressed(false);

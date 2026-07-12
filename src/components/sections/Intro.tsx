@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { identity } from "../../content/portfolio";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useMagnetic } from "../../hooks/useMagnetic";
-import { JapaneseArtBackground } from "../JapaneseArtBackground";
+import { MorphicParticles } from "../MorphicParticles";
 
 /**
  * The arrival — a premium editorial layout centered on clean, uncluttered elegance:
  * - Top Left: Brand logo ("Raj Gohil").
  * - Top Right: Sleek minimal SVG icons (X, Instagram, GitHub) and a 'Talk to me goose' gradient CTA.
- * - Center: Centered header ("Raj Gohil"), animated gradient roles, and narrative statement.
+ * - Center: Centered header ("Raj Gohil"), animated rotating roles, and narrative statement.
  * - Bottom half: An extremely proud, natural marquee of monochrome client logos including the Indian Army.
+ *
+ * This section is a standard 100svh snap slide. Staggered entrance animations are driven natively
+ * by CSS transitions via the `.ent` choreography system as soon as the section becomes active.
  */
 
 function MagneticLink({ className, children, ...props }: React.ComponentPropsWithoutRef<"a">) {
@@ -26,7 +29,7 @@ export function Intro({ active }: { active: boolean }) {
   const roles = identity.rotation?.length ? identity.rotation : [identity.role];
   const [roleIdx, setRoleIdx] = useState(0);
 
-  /* Kinetic line: cycle the practice areas while the intro is on screen. */
+  /* Kinetic line: cycle the practice areas while the intro is active on screen. */
   useEffect(() => {
     if (reduced || !active || roles.length < 2) return;
     const iv = window.setInterval(() => {
@@ -36,14 +39,15 @@ export function Intro({ active }: { active: boolean }) {
   }, [reduced, active, roles.length]);
 
   return (
-    <section id="intro" className={`sec intro sec-light${active ? " is-active" : ""}`} aria-label="Introduction">
-      {/* Traditional Washi Art Backdrop */}
-      <JapaneseArtBackground />
+    <section
+      id="intro"
+      className={`sec intro${active ? " is-active" : ""}`}
+      aria-label="Introduction"
+    >
+      {/* Morphic starry stardust particles in the background */}
+      <MorphicParticles />
 
-      {/* Center 3D Pastel Blurry Glow Blob */}
-      <div className="elegant-glow-blob" />
-
-      {/* Top Header Row (Logo + Social Navigation Icons + Calendar Action) */}
+      {/* Top Header Bar (Logo + Social Navigation Icons + Calendar Action) */}
       <div className="elegant-header-bar ent" style={{ ["--d" as string]: "0.1s" }}>
         <span className="brand-logo">{identity.name}</span>
         <div className="elegant-nav-links">
@@ -85,10 +89,10 @@ export function Intro({ active }: { active: boolean }) {
         <p className="intro-statement ent" style={{ ["--d" as string]: "0.44s" }}>
           {identity.statement}
         </p>
-
-        {/* Selected Clients Scroller (Equal Focus & Extra Spacing) */}
-        <ClientLogos />
       </div>
+
+      {/* Selected Clients Scroller (Equal Focus & Extra Spacing) */}
+      <ClientLogos />
 
       <p className="intro-cue" aria-hidden="true">Scroll</p>
     </section>

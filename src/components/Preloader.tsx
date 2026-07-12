@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { projects } from "../content/portfolio";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -11,6 +11,11 @@ export function Preloader({ onDone }: { onDone: () => void }) {
   useEffect(() => {
     setIsFullyMounted(true);
   }, []);
+
+  /* Keep the latest onDone in a ref so the loop effect never restarts
+     when the parent re-renders (a restart resets the counter). */
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   // Preloading & Progression Loop
   useEffect(() => {
@@ -40,12 +45,18 @@ export function Preloader({ onDone }: { onDone: () => void }) {
       loadedCount++;
     };
 
-    // 2. Preload images
+    // 2. Preload images with browser background decoding to eliminate animation GPU jank
     uniqueImages.forEach((src) => {
       const img = new Image();
       img.src = src;
-      img.onload = onAssetLoaded;
-      img.onerror = onAssetLoaded; // resolve anyway so we don't stall
+      if (img.decode) {
+        img.decode()
+          .then(onAssetLoaded)
+          .catch(onAssetLoaded); // resolve anyway so we don't stall
+      } else {
+        img.onload = onAssetLoaded;
+        img.onerror = onAssetLoaded;
+      }
     });
 
     // 3. Preload fonts

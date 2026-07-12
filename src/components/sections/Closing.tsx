@@ -14,7 +14,7 @@ function MagneticLink({ className, children, ...props }: React.ComponentPropsWit
 export function Closing({ active }: { active: boolean }) {
   const year = new Date().getFullYear();
   return (
-    <section id="contact" className={`sec closing sec-light${active ? " is-active" : ""}`} aria-label="Contact">
+    <section id="contact" className={`sec closing${active ? " is-active" : ""}`} aria-label="Contact">
       <JapaneseArtBackground />
       <div style={{ position: "relative", zIndex: 1 }}>
         <p className="kicker ent">Contact</p>

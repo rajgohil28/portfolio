@@ -3,6 +3,7 @@ import { bySlug, sections } from "./content/portfolio";
 import { DotRail, type SectionRef } from "./components/DotRail";
 import { Intro } from "./components/sections/Intro";
 import { ProjectSection } from "./components/sections/ProjectSection";
+import { Reviews } from "./components/sections/Reviews";
 import { Closing } from "./components/sections/Closing";
 import { CaseStudy } from "./components/CaseStudy";
 import { useReducedMotion } from "./hooks/useReducedMotion";
@@ -10,12 +11,13 @@ import { AdminApp } from "./admin/AdminApp";
 import { Preloader } from "./components/Preloader";
 
 const SECTIONS: (SectionRef & { theme: "light" | "dark" })[] = [
-  { id: "intro", label: "Intro", theme: "light" },
+  { id: "intro", label: "Intro", theme: "dark" },
   { id: "web-apps", label: "Web Apps", theme: sections.web.theme },
   { id: "mobile-apps", label: "Mobile Apps", theme: sections.mobile.theme },
   { id: "xr", label: "XR", theme: sections.xr.theme },
   { id: "games", label: "Games", theme: sections.games.theme },
-  { id: "contact", label: "Contact", theme: "light" },
+  { id: "reviews", label: "Reviews", theme: "light" },
+  { id: "contact", label: "Contact", theme: "dark" },
 ];
 
 function slugFromHash(): string | null {
@@ -160,9 +162,9 @@ export default function App() {
         <ProjectSection kind="mobile" active={active === 2} />
         <ProjectSection kind="xr" active={active === 3} />
         <ProjectSection kind="game" active={active === 4} />
-        <Closing active={active === 5} />
+        <Reviews active={active === 5} />
+        <Closing active={active === 6} />
       </main>
-      <div className="glass-edges" aria-hidden="true" />
       {isLoaded && !project && (
         <DotRail
           sections={SECTIONS}
