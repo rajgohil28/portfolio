@@ -74,13 +74,32 @@ export interface ClosingContent {
   cta: string;
 }
 
-export const identity = content.identity as Identity;
-export const closing = content.closing as ClosingContent;
-export const sections = content.sections as Record<
+// Dynamic content resolver supporting local drafts/previews
+let activeContent = content;
+
+if (typeof window !== "undefined") {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isLiveMode = urlParams.has("live");
+  
+  if (!isLiveMode) {
+    const draft = localStorage.getItem("cms_draft_content");
+    if (draft) {
+      try {
+        activeContent = JSON.parse(draft);
+      } catch (e) {
+        console.error("Failed to parse draft content from localStorage", e);
+      }
+    }
+  }
+}
+
+export const identity = activeContent.identity as Identity;
+export const closing = activeContent.closing as ClosingContent;
+export const sections = activeContent.sections as Record<
   "web" | "mobile" | "xr" | "games",
   SectionMeta
 >;
-export const projects = content.projects as Project[];
+export const projects = activeContent.projects as Project[];
 
 export const byKind = (kind: Kind) => projects.filter((p) => p.kind === kind);
 export const bySlug = (slug: string) => projects.find((p) => p.slug === slug);

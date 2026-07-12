@@ -227,7 +227,6 @@ export function ProjectSection({ kind, active }: { kind: Kind; active: boolean }
             </span>
           ))}
         </h2>
-        <p className="collage-sub ent" style={{ ["--d" as string]: "0.15s" }}>{meta.sub}</p>
       </div>
 
       <div

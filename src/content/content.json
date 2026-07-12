@@ -1,7 +1,7 @@
 {
   "identity": {
     "name": "Raj Gohil",
-    "role": "AI Developer & Product Designer",
+    "role": "AI native builder",
     "statement": "I design and ship AI products people rely on — enterprise platforms, consumer apps, spatial computing, and play.",
     "email": "rajrjgohil@gmail.com",
     "socials": [
@@ -41,7 +41,7 @@
     "mobile": {
       "id": "mobile-apps",
       "label": "Mobile Apps",
-      "heading": "Consumer products with staying power.",
+      "heading": "Consumer products with stickiness.",
       "sub": "D2C AI across health, finance, and lifestyle — designed for daily habits, not demos.",
       "theme": "dark"
     },
