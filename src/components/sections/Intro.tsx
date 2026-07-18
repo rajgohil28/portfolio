@@ -3,6 +3,7 @@ import { identity } from "../../content/portfolio";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useMagnetic } from "../../hooks/useMagnetic";
 import { MorphicParticles } from "../MorphicParticles";
+import { NeuralPortrait } from "../NeuralPortrait";
 
 /**
  * The arrival — a premium editorial layout centered on clean, uncluttered elegance:
@@ -47,6 +48,9 @@ export function Intro({ active }: { active: boolean }) {
       {/* Morphic starry stardust particles in the background */}
       <MorphicParticles />
 
+      {/* Dot-portrait constellation, fixed in the left column */}
+      <NeuralPortrait />
+
       {/* Top Header Bar (Logo + Social Navigation Icons + Calendar Action) */}
       <div className="elegant-header-bar ent" style={{ ["--d" as string]: "0.1s" }}>
         <span className="brand-logo">{identity.name}</span>
@@ -82,7 +86,15 @@ export function Intro({ active }: { active: boolean }) {
         <p className="intro-role ent" style={{ ["--d" as string]: "0.34s" }}>
           {identity.role} —{" "}
           <span className="intro-rotator" aria-live="off">
-            <span key={roleIdx} className="intro-rotator-word">{roles[roleIdx]}</span>
+            <span key={roleIdx} className="intro-rotator-word">
+              {roles[roleIdx].split("").map((ch, i) => (
+                <span className="letter-roll" key={i}>
+                  <span className="letter-roll-glyph" style={{ ["--i" as string]: i }}>
+                    {ch === " " ? " " : ch}
+                  </span>
+                </span>
+              ))}
+            </span>
           </span>
         </p>
 

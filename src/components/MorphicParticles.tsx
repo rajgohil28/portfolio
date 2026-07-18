@@ -165,13 +165,11 @@ export function MorphicParticles() {
       let cx = width / 2;
       let cy = height * 0.44; // vertical empty middle
       
-      // On desktop, every formation lands somewhere new: random side, random distance
-      // from the edge, random height — bounded to the empty side columns so the icon
-      // never overlaps the central typography and never clips off-screen
+      // On desktop, the icon always forms in the same fixed spot on the right side —
+      // only the shape itself changes, the icon never moves.
       if (!isMobile) {
-        const edgeBand = 0.15 + Math.random() * 0.05; // icon center sits 15%–20% in from the edge
-        cx = Math.random() < 0.5 ? width * edgeBand : width * (1 - edgeBand);
-        cy = height * (0.32 + Math.random() * 0.26);
+        cx = width * 0.82;
+        cy = height * 0.44;
       } else {
         // On mobile, position them in the top-center empty space above your name
         cy = height * 0.22; 
