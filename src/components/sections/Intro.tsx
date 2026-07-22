@@ -30,12 +30,15 @@ export function Intro({ active }: { active: boolean }) {
   const roles = identity.rotation?.length ? identity.rotation : [identity.role];
   const [roleIdx, setRoleIdx] = useState(0);
 
-  /* Kinetic line: cycle the practice areas while the intro is active on screen. */
+  /* The one clock: cycle the practice areas while the intro is active on screen.
+     The same tick drives the particle icon morph (roleIdx -> shapeIndex below), so
+     the particles always illustrate the role being announced. 7s gives the ~3.2s
+     staggered morph time to complete and the formed shape time to hold. */
   useEffect(() => {
     if (reduced || !active || roles.length < 2) return;
     const iv = window.setInterval(() => {
       setRoleIdx((i) => (i + 1) % roles.length);
-    }, 2600);
+    }, 7000);
     return () => window.clearInterval(iv);
   }, [reduced, active, roles.length]);
 
@@ -45,8 +48,10 @@ export function Intro({ active }: { active: boolean }) {
       className={`sec intro${active ? " is-active" : ""}`}
       aria-label="Introduction"
     >
-      {/* Morphic starry stardust particles in the background */}
-      <MorphicParticles />
+      {/* Morphic starry stardust particles in the background — the icon mirrors the
+          rotator: Enterprise AI = brain, Consumer apps = iPhone, Spatial computing =
+          Vision Pro, Play = controller (shape indices 1-4 in MorphicParticles). */}
+      <MorphicParticles shapeIndex={(roleIdx % 4) + 1} />
 
       {/* Dot-portrait constellation, fixed in the left column */}
       <NeuralPortrait />

@@ -24,9 +24,12 @@ interface Particle {
 // Ultra-dense, hyper-vibrant cybernetic neural ocean — doubled to 13500 particles for sharply defined icon shapes.
 const PARTICLE_COUNT = 13500;
 
-export function MorphicParticles() {
+export function MorphicParticles({ shapeIndex = 1 }: { shapeIndex?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  // Bridge from the prop world into the imperative canvas world: the setup effect
+  // installs the morph function here, and the shapeIndex effect below invokes it.
+  const morphToRef = useRef<((shape: number) => void) | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -588,10 +591,12 @@ export function MorphicParticles() {
       return finalPoints;
     };
 
-    const cycleNextShape = () => {
-      // Morph directly into the next shape in the sequence: 1 -> 2 -> 3 -> 4 -> 1 -> ...
+    const morphTo = (shape: number) => {
+      // Morph directly into the requested shape — the parent drives which shape is
+      // active (synced to the role rotator), this only performs the transition.
       // With NO scattered break phase, they continuously and elegantly transition directly between shapes
-      currentShapeIndex = (currentShapeIndex % 4) + 1;
+      if (shape === currentShapeIndex) return;
+      currentShapeIndex = shape;
       const targets = getTargetPoints(currentShapeIndex);
       if (targets.length > 0) {
         transitionStartTime = Date.now(); // Reset transition start timestamp
@@ -608,8 +613,7 @@ export function MorphicParticles() {
       }
     };
 
-    // Run direct shape morph cycle every 10.0 seconds (10000ms) to give slow-motion particles ample time to form and hold shapes
-    const morphInterval = window.setInterval(cycleNextShape, 10000);
+    morphToRef.current = morphTo;
 
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
@@ -760,10 +764,16 @@ export function MorphicParticles() {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerleave", handlePointerLeave);
       resizeObserver.disconnect();
-      clearInterval(morphInterval);
       cancelAnimationFrame(animationFrameId);
+      morphToRef.current = null;
     };
   }, []);
+
+  // React to the parent's shape choice — on mount this is a no-op (shape 1 is
+  // already forming), afterwards each rotator tick triggers the matching morph.
+  useEffect(() => {
+    morphToRef.current?.(shapeIndex);
+  }, [shapeIndex]);
 
   return (
     <div ref={containerRef} className="morphic-particles-container" aria-hidden="true">
