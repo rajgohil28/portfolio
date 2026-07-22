@@ -3,6 +3,7 @@ import { identity } from "../../content/portfolio";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useMagnetic } from "../../hooks/useMagnetic";
 import { MorphicParticles } from "../MorphicParticles";
+import { NeuralPortrait } from "../NeuralPortrait";
 
 /**
  * The arrival — a premium editorial layout centered on clean, uncluttered elegance:
@@ -29,12 +30,15 @@ export function Intro({ active }: { active: boolean }) {
   const roles = identity.rotation?.length ? identity.rotation : [identity.role];
   const [roleIdx, setRoleIdx] = useState(0);
 
-  /* Kinetic line: cycle the practice areas while the intro is active on screen. */
+  /* The one clock: cycle the practice areas while the intro is active on screen.
+     The same tick drives the particle icon morph (roleIdx -> shapeIndex below), so
+     the particles always illustrate the role being announced. 7s gives the ~3.2s
+     staggered morph time to complete and the formed shape time to hold. */
   useEffect(() => {
     if (reduced || !active || roles.length < 2) return;
     const iv = window.setInterval(() => {
       setRoleIdx((i) => (i + 1) % roles.length);
-    }, 2600);
+    }, 7000);
     return () => window.clearInterval(iv);
   }, [reduced, active, roles.length]);
 
@@ -44,8 +48,13 @@ export function Intro({ active }: { active: boolean }) {
       className={`sec intro${active ? " is-active" : ""}`}
       aria-label="Introduction"
     >
-      {/* Morphic starry stardust particles in the background */}
-      <MorphicParticles />
+      {/* Morphic starry stardust particles in the background — the icon mirrors the
+          rotator: Enterprise AI = brain, Consumer apps = iPhone, Spatial computing =
+          Vision Pro, Play = controller (shape indices 1-4 in MorphicParticles). */}
+      <MorphicParticles shapeIndex={(roleIdx % 4) + 1} />
+
+      {/* Dot-portrait constellation, fixed in the left column */}
+      <NeuralPortrait />
 
       {/* Top Header Bar (Logo + Social Navigation Icons + Calendar Action) */}
       <div className="elegant-header-bar ent" style={{ ["--d" as string]: "0.1s" }}>
@@ -82,7 +91,15 @@ export function Intro({ active }: { active: boolean }) {
         <p className="intro-role ent" style={{ ["--d" as string]: "0.34s" }}>
           {identity.role} —{" "}
           <span className="intro-rotator" aria-live="off">
-            <span key={roleIdx} className="intro-rotator-word">{roles[roleIdx]}</span>
+            <span key={roleIdx} className="intro-rotator-word">
+              {roles[roleIdx].split("").map((ch, i) => (
+                <span className="letter-roll" key={i}>
+                  <span className="letter-roll-glyph" style={{ ["--i" as string]: i }}>
+                    {ch === " " ? " " : ch}
+                  </span>
+                </span>
+              ))}
+            </span>
           </span>
         </p>
 
